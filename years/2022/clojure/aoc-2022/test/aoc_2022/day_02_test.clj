@@ -3,5 +3,9 @@
             [clojure.test :refer :all]))
 
 (deftest day-02-test
-  (is (= 15 (part1 "../../data/02-sample.txt")))
-  (is (= 12 (part2 "../../data/02-sample.txt"))))
+  (testing "sample data"
+    (is (= 15 (part1 "../../data/02-sample.txt")))
+    (is (= 12 (part2 "../../data/02-sample.txt"))))
+  (testing "puzzle data"
+    (is (= 12156 (part1 "../../data/02.txt")))
+    (is (= 10835 (part2 "../../data/02.txt")))))
