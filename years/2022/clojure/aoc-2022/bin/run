@@ -1,0 +1,6 @@
+#!/bin/bash
+
+YEAR=$1
+DAY=$2
+
+lein run -m aoc-${YEAR}.day-${DAY}
