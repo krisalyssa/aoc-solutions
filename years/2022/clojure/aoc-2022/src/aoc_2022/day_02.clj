@@ -43,9 +43,15 @@
        (moves (read-file filename))))
 
 ;; part 1
+(defn part1 [filename]
+  (reduce + (scores filename)))
+
 ;; (reduce + (scores "../../data/02-sample.txt"))
-(reduce + (scores "../../data/02.txt"))
+;; (reduce + (scores "../../data/02.txt"))
 
 ;; part 2
+(defn part2 [filename]
+  (reduce + (revised-scores filename)))
+
 ;; (reduce + (revised-scores "../../data/02-sample.txt"))
-(reduce + (revised-scores "../../data/02.txt"))
+;; (reduce + (revised-scores "../../data/02.txt"))
