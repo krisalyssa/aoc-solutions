@@ -16,16 +16,12 @@
 (defn sum-top [n s]
   (reduce + (take n (sort > s))))
 
-;; part 1
 (defn part1 [filename]
   (sum-top 1 (map #(reduce + %) (parse-lists filename))))
 
-;; (sum-top 1 (map #(reduce + %) (parse-lists "../../data/01-sample.txt")))
-;; (sum-top 1 (map #(reduce + %) (parse-lists "../../data/01.txt")))
-
-;; part 2
 (defn part2 [filename]
   (sum-top 3 (map #(reduce + %) (parse-lists filename))))
 
-;; (sum-top 3 (map #(reduce + %) (parse-lists "../../data/01-sample.txt")))
-;; (sum-top 3 (map #(reduce + %) (parse-lists "../../data/01.txt")))
+(defn -main []
+  (printf "day 01 part 1: %d%n" (part1 "../../data/01.txt"))
+  (printf "day 01 part 2: %d%n" (part2 "../../data/01.txt")))

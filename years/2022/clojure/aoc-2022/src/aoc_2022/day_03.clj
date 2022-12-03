@@ -28,22 +28,14 @@
 (defn badge [g]
   (apply sets/intersection g))
 
-;; part 1
 (defn part1 [filename]
   (reduce + (map #(priority (first (seq %)))
                  (map common (read-file filename)))))
 
-;; (reduce + (map #(priority (first (seq %)))
-;;                (map common (read-file "../../data/03-sample.txt"))))
-;; (reduce + (map #(priority (first (seq %)))
-;;                (map common (read-file "../../data/03.txt"))))
-
-;; part 2
 (defn part2 [filename]
   (reduce + (map #(priority (first (seq %)))
                  (map badge (groups (map set-from (read-file filename)))))))
 
-;; (reduce + (map #(priority (first (seq %)))
-;;                (map badge (groups (map set-from (read-file "../../data/03-sample.txt"))))))
-;; (reduce + (map #(priority (first (seq %)))
-;;                (map badge (groups (map set-from (read-file "../../data/03.txt"))))))
+(defn -main []
+  (printf "day 03 part 1: %d%n" (part1 "../../data/03.txt"))
+  (printf "day 03 part 2: %d%n" (part2 "../../data/03.txt")))

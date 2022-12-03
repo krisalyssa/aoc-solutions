@@ -42,16 +42,12 @@
   (map #(score (pick-move %))
        (moves (read-file filename))))
 
-;; part 1
 (defn part1 [filename]
   (reduce + (scores filename)))
 
-;; (reduce + (scores "../../data/02-sample.txt"))
-;; (reduce + (scores "../../data/02.txt"))
-
-;; part 2
 (defn part2 [filename]
   (reduce + (revised-scores filename)))
 
-;; (reduce + (revised-scores "../../data/02-sample.txt"))
-;; (reduce + (revised-scores "../../data/02.txt"))
+(defn -main []
+  (printf "day 02 part 1: %d%n" (part1 "../../data/02.txt"))
+  (printf "day 02 part 2: %d%n" (part2 "../../data/02.txt")))
