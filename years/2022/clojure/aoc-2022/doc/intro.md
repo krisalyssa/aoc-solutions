@@ -13,3 +13,5 @@ TODO: write [great documentation](http://jacobian.org/writing/what-to-write/)
 <https://clojuredocs.org/core-library/vars>
 <https://clojure.github.io/clojure/index.html>
 <https://www.braveclojure.com/clojure-for-the-brave-and-true/>
+https://github.com/abyala/advent-2021-clojure
+https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
