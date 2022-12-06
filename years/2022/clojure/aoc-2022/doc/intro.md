@@ -15,3 +15,4 @@ TODO: write [great documentation](http://jacobian.org/writing/what-to-write/)
 <https://www.braveclojure.com/clojure-for-the-brave-and-true/>
 https://github.com/abyala/advent-2021-clojure
 https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
+https://guide.clojure.style
