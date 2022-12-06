@@ -4,8 +4,8 @@
 
 (deftest day-05-test
   (testing "sample data"
-    (is (= "CMZ" (part1 "../../data/05-sample.txt"))))
-    ;; (is (= "" (part2 "../../data/05-sample.txt"))))
+    (is (= "CMZ" (part1 "../../data/05-sample.txt")))
+    (is (= "MCD" (part2 "../../data/05-sample.txt"))))
   (testing "puzzle data"
-    (is (= "TLFGBZHCN" (part1 "../../data/05.txt")))))
-  ;;   (is (= "" (part2 "../../data/05.txt")))))
+    (is (= "TLFGBZHCN" (part1 "../../data/05.txt")))
+    (is (= "QRQFHFWCL" (part2 "../../data/05.txt")))))

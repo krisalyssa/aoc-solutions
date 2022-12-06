@@ -16,8 +16,8 @@
    and the new stack.
    Note: currently the number of crates to remove is hardcoded to 1.
    That needs to be passed in as a parameter."
-  [stack]
-  (split-at 1 stack))
+  [n stack]
+  (split-at n stack))
 
 ;; initialization functions
 
@@ -79,37 +79,42 @@
   "Parses an instruction line into a sequence of (from-stack to-stack).
    Currently assumes only one crate is being moved."
   [line]
-  (map #(Integer/parseInt %) (rest (re-matches #"move (\d+) from (\d+) to (\d+)" line))))
+  (map #(Integer/parseInt %)
+       (rest (re-matches #"move (\d+) from (\d+) to (\d+)" line)))) ;; (rest *) to lose the whole pattern match
+
+;; functions which change behavior based on the selector
 
 (defn expand-instruction
   "Expands instructions for moving crates into a sequence of instructions moving a single crate."
-  [[count from to]]
-  (for [_ (range count)] [from to]))
+  [selector [count from to]]
+  (if (= selector "cm9000")
+    (for [_ (range count)] [1 from to])
+    (list [count from to])))
 
 (defn add-instruction-to-list
   "Adds instructions for a source line to the list and returns the new list.
    For the CrateMover 9000, source lines which indicate moving multiple crates need to be expanded
    into multiple instructions moving one crate each."
-  [instruction-list instruction]
-  (reduce (fn [acc item] (cons item acc)) instruction-list (expand-instruction instruction)))
+  [selector instruction-list instruction]
+  (reduce (fn [acc item] (cons item acc)) instruction-list (expand-instruction selector instruction)))
 
 (defn parse-instruction-lines
   "Parses the strings representing instructions for moving crates."
-  [lines]
+  [selector lines]
   (let [instruction (map parse-instruction-line lines)
         instruction-list '()]
-    (reverse (reduce (fn [acc item] (add-instruction-to-list acc item)) instruction-list instruction))))
+    (reverse (reduce (fn [acc item] (add-instruction-to-list selector acc item)) instruction-list instruction))))
 
-;; functions for the CrateMover 9000
+;; functions for the CrateMover 900x
 
 (defn execute-one-instruction
   "Executes a single instruction for moving crates."
-  [stacks [from-idx to-idx]]
+  [stacks [n from-idx to-idx]]
   (let [from-stack (aget stacks from-idx)
-        [crate new-from-stack] (take-from-stack from-stack)
+        [crates new-from-stack] (take-from-stack n from-stack)
         to-stack (aget stacks to-idx)]
     (aset stacks from-idx new-from-stack)
-    (aset stacks to-idx (put-on-stack to-stack crate))
+    (aset stacks to-idx (put-on-stack to-stack crates))
     stacks))
 
 (defn execute
@@ -127,17 +132,17 @@
 (defn part1 [filename]
   (let [[stack-lines _ instruction-lines] (partition-file (read-file filename))
         stacks (initialize-stacks (parse-stack-lines stack-lines))
-        instructions (parse-instruction-lines instruction-lines)
+        instructions (parse-instruction-lines "cm9000" instruction-lines)
         final-state (execute stacks instructions)]
     (str/join (stack-tops final-state))))
 
-;; (defn part2 [filename]
-;;   (let [[stack-lines _ instruction-lines] (partition-file (read-file filename))
-;;         stacks (initialize-stacks (parse-stack-lines stack-lines))
-;;         instructions (parse-instruction-lines-9001 instruction-lines)
-;;         final-state (execute-9001 stacks instructions)]
-;;     (str/join (stack-tops final-state))))
+(defn part2 [filename]
+  (let [[stack-lines _ instruction-lines] (partition-file (read-file filename))
+        stacks (initialize-stacks (parse-stack-lines stack-lines))
+        instructions (parse-instruction-lines "cm9001" instruction-lines)
+        final-state (execute stacks instructions)]
+    (str/join (stack-tops final-state))))
 
 (defn -main []
-  (printf "day 05 part 1: %s%n" (part1 "../../data/05.txt")))
-  ;; (printf "day 05 part 2: %d%n" (part2 "../../data/05.txt")))
+  (printf "day 05 part 1: %s%n" (part1 "../../data/05.txt"))
+  (printf "day 05 part 2: %s%n" (part2 "../../data/05.txt")))
