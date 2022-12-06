@@ -87,7 +87,7 @@
 (defn expand-instruction
   "Expands instructions for moving crates into a sequence of instructions moving a single crate."
   [selector [count from to]]
-  (if (= selector "cm9000")
+  (if (= selector :cm9000)
     (for [_ (range count)] [1 from to])
     (list [count from to])))
 
@@ -132,14 +132,14 @@
 (defn part1 [filename]
   (let [[stack-lines _ instruction-lines] (partition-file (read-file filename))
         stacks (initialize-stacks (parse-stack-lines stack-lines))
-        instructions (parse-instruction-lines "cm9000" instruction-lines)
+        instructions (parse-instruction-lines :cm9000 instruction-lines)
         final-state (execute stacks instructions)]
     (str/join (stack-tops final-state))))
 
 (defn part2 [filename]
   (let [[stack-lines _ instruction-lines] (partition-file (read-file filename))
         stacks (initialize-stacks (parse-stack-lines stack-lines))
-        instructions (parse-instruction-lines "cm9001" instruction-lines)
+        instructions (parse-instruction-lines :cm9001 instruction-lines)
         final-state (execute stacks instructions)]
     (str/join (stack-tops final-state))))
 
