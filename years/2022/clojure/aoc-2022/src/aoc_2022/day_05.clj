@@ -7,17 +7,17 @@
 ;; common functions (used in multiple places)
 
 (defn put-on-stack
-  "Places a crate on the top of a stack and returns the new stack.
-   If the value of `crate` is whitespace, do nothing."
-  [stack crate]
-  (if (str/blank? crate)
-    stack
-    (cons crate stack)))
+  "Places one or more crates on the top of a stack and returns the new stack."
+  [stack crates]
+  (concat crates stack))
 
 (defn take-from-stack
-  "Removes a crate from the top of a stack and returns the new stack."
+  "Removes one or more crates from the top of a stack and returns the removed crates
+   and the new stack.
+   Note: currently the number of crates to remove is hardcoded to 1.
+   That needs to be passed in as a parameter."
   [stack]
-  [(first stack) (rest stack)])
+  (split-at 1 stack))
 
 ;; initialization functions
 
@@ -60,12 +60,20 @@
   (let [[labels & levels] (reverse lines)]
     [labels levels]))
 
+(defn put-one-crate-on-stack
+  "Places a crate on the top of a stack and returns the new stack.
+   If the value of `crate` is whitespace, do nothing."
+  [stack crate]
+  (if (str/blank? crate)
+    stack
+    (cons crate stack)))
+
 (defn initialize-stacks
   "Sets up the initial state of the stacks."
   [lines]
   (let [[labels levels] (extract-labels lines)
         stacks (reduce (fn [acc _] (cons '() acc)) '() labels)]
-    (to-array (cons '() (reduce (fn [acc level] (map put-on-stack acc level)) stacks levels)))))
+    (to-array (cons '() (reduce (fn [acc level] (map put-one-crate-on-stack acc level)) stacks levels)))))
 
 (defn parse-instruction-line
   "Parses an instruction line into a sequence of (from-stack to-stack).
