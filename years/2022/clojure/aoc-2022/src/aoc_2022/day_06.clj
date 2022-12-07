@@ -37,9 +37,9 @@
 (defn part1 [filename]
   (scan-for-marker (read-file filename) 4))
 
-;; (defn part2 [filename]
-;;   (count (filter #(apply overlap? (sections %)) (read-file filename))))
+(defn part2 [filename]
+  (scan-for-marker (read-file filename) 14))
 
 (defn -main []
-  (printf "day 06 part 1: %d%n" (part1 "../../data/06.txt")))
-  ;; (printf "day 06 part 2: %d%n" (part2 "../../data/06.txt")))
+  (printf "day 06 part 1: %d%n" (part1 "../../data/06.txt"))
+  (printf "day 06 part 2: %d%n" (part2 "../../data/06.txt")))
