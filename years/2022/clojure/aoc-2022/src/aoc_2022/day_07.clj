@@ -85,7 +85,7 @@
   [lines]
   (reduce (fn [[cwd tree] line] (process-line cwd tree line)) '[() {}] lines))
 
-(defn du
+(defn du-part1
   "Calculates sizes of directories, like `du -b`."
   [tree]
   (let [directories (atom '())]
@@ -99,12 +99,38 @@
                        node)) tree)
     (apply + (deref directories))))
 
-(defn part1 [filename]
-  (du (second (read-listing (read-file filename)))))
+(defn du
+  "Calculates sizes of directories, like `du -b`."
+  [tree]
+  (let [directories (atom '())]
+    (walk/postwalk (fn [node]
+                     (if (map? node)
+                       (let [dir-size (apply + (vals node))]
+                         ;; this should be evaluated only if the passed-in predicate is true
+                         (swap! directories (fn [current-value] (cons dir-size current-value)))
+                         ;; note that no such predicate is currently being passed in
+                         ;; see du-part1 above for what that predicate should look like
+                         dir-size)
+                       node)) tree)
+    (deref directories)))
 
-;; (defn part2 [filename]
-;;   (scan-for-marker (read-file filename) 14))
+(defn space-to-free
+  "Calculates how much space needs to be freed up."
+  [total-used]
+  (let [free-space (- 70000000 total-used)]
+    (if (< free-space 30000000)
+      (- 30000000 free-space)
+      0)))
+
+(defn part1 [filename]
+  (du-part1 (second (read-listing (read-file filename)))))
+
+(defn part2 [filename]
+  (let [sizes (du (second (read-listing (read-file filename))))
+        total-used (first sizes)
+        needed (space-to-free total-used)]
+    (apply min (filter (fn [size] (>= size needed)) sizes))))
 
 (defn -main []
-  (printf "day 07 part 1: %d%n" (part1 "../../data/07.txt")))
-  ;; (printf "day 07 part 2: %d%n" (part2 "../../data/07.txt")))
+  (printf "day 07 part 1: %d%n" (part1 "../../data/07.txt"))
+  (printf "day 07 part 2: %d%n" (part2 "../../data/07.txt")))
