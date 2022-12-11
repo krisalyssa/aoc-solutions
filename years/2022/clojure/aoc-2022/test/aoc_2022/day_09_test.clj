@@ -4,8 +4,9 @@
 
 (deftest day-09-test
   (testing "sample data"
-    (is (= 13 (part1 "../../data/09-sample.txt"))))
-;;     (is (= 8 (part2 "../../data/09-sample.txt"))))
+    (is (= 13 (part1 "../../data/09-sample-1.txt")))
+    (is (= 1 (part2 "../../data/09-sample-1.txt")))
+    (is (= 36 (part2 "../../data/09-sample-2.txt"))))
   (testing "puzzle data"
-    (is (= 5902 (part1 "../../data/09.txt")))))
-;;     (is (= 332640 (part2 "../../data/09.txt")))))
+    (is (= 5902 (part1 "../../data/09.txt")))
+    (is (= 2445 (part2 "../../data/09.txt")))))

@@ -1,8 +1,8 @@
 (ns aoc-2022.day-09
   (:gen-class))
 
-(require ;; '[clojure.pprint :as pp]
- '[clojure.string :as str])
+(require '[clojure.pprint :as pp]
+         '[clojure.string :as str])
 
 ;; initialization functions
 
@@ -14,133 +14,162 @@
 
 (defn initialize-state
   "Set up the initial state."
-  []
-  {:visited (set '()) :h {:x 0 :y 0} :t {:x 0 :y 0}})
+  [knot-count]
+  {:visited (set '()) :knots (repeat knot-count {:x 0 :y 0})})
 
 ;; utility functions
 
 (defn relative-position
-  "returns the position of `t` relative to `h`."
-  [h t]
-  [(- (get t :x) (get h :x)) (- (get t :y) (get h :y))])
+  "returns the position of one knot relative to another."
+  [head tail]
+  [(- (get tail :x) (get head :x)) (- (get tail :y) (get head :y))])
 
-;; functions related to moving the head and tail positions
+;; functions related to fixing up a knot's position
 
-;; There are 36 possible state changes with each move -- 9 starting positions (T relative to H)
-;; and 4 directions H can go.
-;; Assume H is at [0 0]. Then T can be at [{-1,0,1} {-1,0,1}], where X and Y increase right and up respectively.
-;; The four directions should be self-explanatory.
+;; The head knot moves according to the instructions supplied.
+;; Each successive knot moves as necessary to fixup its position
+;; relative to the one before it.
 
-(defmulti get-tail-move
-  "Moves T according to its location relative to H, and the direction H is moving."
-  (fn [h t dir] [(relative-position h t) dir]))
+(defmulti get-fixup-move
+  "Returns a vector that will move the tail back to a valid position."
+  (fn [head tail] [(relative-position head tail)]))
 
-;;  . . .
-;;  . H .
-;;  T . .
-(defmethod get-tail-move [[-1 -1] :up] [_ _ _] [1 1])
-(defmethod get-tail-move [[-1 -1] :down] [_ _ _] [0 0])
-(defmethod get-tail-move [[-1 -1] :left] [_ _ _] [0 0])
-(defmethod get-tail-move [[-1 -1] :right] [_ _ _] [1 1])
+;;  . . . . .
+;;  . . . . .
+;;  . . # . .  ;; knots overlap
+;;  . . . . .
+;;  . . . . .
+(defmethod get-fixup-move [[0 0]] [_ _] [0 0])
 
-;;  . . .
-;;  . H .
-;;  . T .
-(defmethod get-tail-move [[0 -1] :up] [_ _ _] [0 1])
-(defmethod get-tail-move [[0 -1] :down] [_ _ _] [0 0])
-(defmethod get-tail-move [[0 -1] :left] [_ _ _] [0 0])
-(defmethod get-tail-move [[0 -1] :right] [_ _ _] [0 0])
+;;  . . . . .
+;;  . T T T .
+;;  . T H T .  ;; T is in 3x3 neighborhood of H
+;;  . T T T .
+;;  . . . . .
+(defmethod get-fixup-move [[1 0]] [_ _] [0 0])
+(defmethod get-fixup-move [[1 -1]] [_ _] [0 0])
+(defmethod get-fixup-move [[0 -1]] [_ _] [0 0])
+(defmethod get-fixup-move [[-1 -1]] [_ _] [0 0])
+(defmethod get-fixup-move [[-1 0]] [_ _] [0 0])
+(defmethod get-fixup-move [[-1 1]] [_ _] [0 0])
+(defmethod get-fixup-move [[0 1]] [_ _] [0 0])
+(defmethod get-fixup-move [[1 1]] [_ _] [0 0])
 
-;;  . . .
-;;  . H .
-;;  . . T
-(defmethod get-tail-move [[1 -1] :up] [_ _ _] [-1 1])
-(defmethod get-tail-move [[1 -1] :down] [_ _ _] [0 0])
-(defmethod get-tail-move [[1 -1] :left] [_ _ _] [-1 1])
-(defmethod get-tail-move [[1 -1] :right] [_ _ _] [0 0])
+;;  . . . . .
+;;  . . . . .
+;;  . . H . T
+;;  . . . . .
+;;  . . . . .
+(defmethod get-fixup-move [[2 0]] [_ _] [-1 0])
 
-;;  . . .
-;;  T H .
-;;  . . .
-(defmethod get-tail-move [[-1 0] :up] [_ _ _] [0 0])
-(defmethod get-tail-move [[-1 0] :down] [_ _ _] [0 0])
-(defmethod get-tail-move [[-1 0] :left] [_ _ _] [0 0])
-(defmethod get-tail-move [[-1 0] :right] [_ _ _] [1 0])
+;;  . . . . .
+;;  . . . . .
+;;  . . H . .
+;;  . . . . T
+;;  . . . T T
+(defmethod get-fixup-move [[2 -1]] [_ _] [-1 1])
+(defmethod get-fixup-move [[2 -2]] [_ _] [-1 1])
+(defmethod get-fixup-move [[1 -2]] [_ _] [-1 1])
 
-;;  . . .
-;;  . # .
-;;  . . .
-(defmethod get-tail-move [[0 0] :up] [_ _ _] [0 0])
-(defmethod get-tail-move [[0 0] :down] [_ _ _] [0 0])
-(defmethod get-tail-move [[0 0] :left] [_ _ _] [0 0])
-(defmethod get-tail-move [[0 0] :right] [_ _ _] [0 0])
+;;  . . . . .
+;;  . . . . .
+;;  . . H . .
+;;  . . . . .
+;;  . . T . .
+(defmethod get-fixup-move [[0 -2]] [_ _] [0 1])
 
-;;  . . .
-;;  . H T
-;;  . . .
-(defmethod get-tail-move [[1 0] :up] [_ _ _] [0 0])
-(defmethod get-tail-move [[1 0] :down] [_ _ _] [0 0])
-(defmethod get-tail-move [[1 0] :left] [_ _ _] [-1 0])
-(defmethod get-tail-move [[1 0] :right] [_ _ _] [0 0])
+;;  . . . . .
+;;  . . . . .
+;;  . . H . .
+;;  T . . . .
+;;  T T . . .
+(defmethod get-fixup-move [[-1 -2]] [_ _] [1 1])
+(defmethod get-fixup-move [[-2 -2]] [_ _] [1 1])
+(defmethod get-fixup-move [[-2 -1]] [_ _] [1 1])
 
-;;  T . .
-;;  . H .
-;;  . . .
-(defmethod get-tail-move [[-1 1] :up] [_ _ _] [0 0])
-(defmethod get-tail-move [[-1 1] :down] [_ _ _] [1 -1])
-(defmethod get-tail-move [[-1 1] :left] [_ _ _] [0 0])
-(defmethod get-tail-move [[-1 1] :right] [_ _ _] [1 -1])
+;;  . . . . .
+;;  . . . . .
+;;  T . H . .
+;;  . . . . .
+;;  . . . . .
+(defmethod get-fixup-move [[-2 0]] [_ _] [1 0])
 
-;;  . T .
-;;  . H .
-;;  . . .
-(defmethod get-tail-move [[0 1] :up] [_ _ _] [0 0])
-(defmethod get-tail-move [[0 1] :down] [_ _ _] [0 -1])
-(defmethod get-tail-move [[0 1] :left] [_ _ _] [0 0])
-(defmethod get-tail-move [[0 1] :right] [_ _ _] [0 0])
+;;  T T . . .
+;;  T . . . .
+;;  . . H . .
+;;  . . . . .
+;;  . . . . .
+(defmethod get-fixup-move [[-2 1]] [_ _] [1 -1])
+(defmethod get-fixup-move [[-2 2]] [_ _] [1 -1])
+(defmethod get-fixup-move [[-1 2]] [_ _] [1 -1])
 
-;;  . . T
-;;  . H .
-;;  . . .
-(defmethod get-tail-move [[1 1] :up] [_ _ _] [0 0])
-(defmethod get-tail-move [[1 1] :down] [_ _ _] [-1 -1])
-(defmethod get-tail-move [[1 1] :left] [_ _ _] [-1 -1])
-(defmethod get-tail-move [[1 1] :right] [_ _ _] [0 0])
+;;  . . T . .
+;;  . . . . .
+;;  . . H . .
+;;  . . . . .
+;;  . . . . .
+(defmethod get-fixup-move [[0 2]] [_ _] [0 -1])
 
-(defn move-head
-  "Moves H one step in the indicated direction."
-  [h direction]
+;;  . . . T T
+;;  . . . . T
+;;  . . H . .
+;;  . . . . .
+;;  . . . . .
+(defmethod get-fixup-move [[1 2]] [_ _] [-1 -1])
+(defmethod get-fixup-move [[2 2]] [_ _] [-1 -1])
+(defmethod get-fixup-move [[2 1]] [_ _] [-1 -1])
+
+(defn move-knot-by-direction
+  "Moves a knot one step in the indicated direction."
+  [knot direction]
   (case direction
-    :up (update h :y (fn [y] (inc y)))
-    :down (update h :y (fn [y] (dec y)))
-    :left (update h :x (fn [x] (dec x)))
-    :right (update h :x (fn [x] (inc x)))))
+    :up (update knot :y (fn [y] (inc y)))
+    :down (update knot :y (fn [y] (dec y)))
+    :left (update knot :x (fn [x] (dec x)))
+    :right (update knot :x (fn [x] (inc x)))))
 
-(defn move-tail
-  "Moves T in response to H's position."
-  [t [move-x move-y]]
-  (-> t
+(defn move-knot-by-vector
+  "Moves a knot by applying a vector."
+  [knot [move-x move-y]]
+  (-> knot
       (update :x (fn [x] (+ x move-x)))
       (update :y (fn [y] (+ y move-y)))))
 
+(defn fixup-one-knot
+  "Move a knot so it's in a valid position."
+  [head tail]
+  (move-knot-by-vector tail (get-fixup-move head tail)))
+
+(defn fixup-knots
+  "Apply fixups to an entire rope."
+  [knots]
+  (let [head (first knots) fixup-state {:head head :knot-list (list head)}]
+    (reverse
+     (get
+      (reduce (fn [state, knot]
+                (let [new-knot (fixup-one-knot (get state :head) knot)]
+                  (-> state
+                      (update :head (fn [_] new-knot))
+                      (update :knot-list (fn [old-list] (cons new-knot old-list)))))) fixup-state (rest knots))
+      :knot-list))))
+
 (defn visit
-  "Mark the tail location as visited."
-  [state]
-  (let [x (get-in state [:t :x]) y (get-in state [:t :y])]
+  "Mark the location of the knot as visited."
+  [state knot]
+  (let [x (get knot :x) y (get knot :y)]
     (update state :visited (fn [v] (conj v [x y])))))
 
 ;; execute the list of instructions
 
 (defn execute-one-step
-  "Executes a single step in the instuctions."
+  "Executes a single step in the instructions."
   [state direction]
-  (let [h (get state :h)
-        t (get state :t)
-        tail-move (get-tail-move h t direction)]
+  (let [knots (get state :knots)
+        head (move-knot-by-direction (first knots) direction)
+        new-knots (fixup-knots (cons head (rest knots)))]
     (-> state
-        (update :h (fn [v] (move-head v direction)))
-        (update :t (fn [v] (move-tail v tail-move)))
-        visit)))
+        (visit (last new-knots))
+        (update :knots (fn [_] new-knots)))))
 
 (defn execute-one-line
   "Executes one line in the instructions."
@@ -155,17 +184,18 @@
 
 (defn part1 [filename]
   (let [instructions (read-file filename)
-        state (initialize-state)]
+        state (initialize-state 2)]
     (-> (reduce (fn [acc line] (execute-one-line acc line)) state instructions)
         (get :visited)
         count)))
 
-;; (defn part2 [filename]
-;;   (let [grid (as-grid (read-file filename))
-;;         [row-count col-count] (matrix/shape grid)
-;;         row-col-seq (for [row-num (range row-count) col-num (range col-count)] [row-num col-num])]
-;;     (apply max (map (fn [[row-num col-num]] (scenic-score grid row-num col-num)) row-col-seq))))
+(defn part2 [filename]
+  (let [instructions (read-file filename)
+        state (initialize-state 10)]
+    (-> (reduce (fn [acc line] (execute-one-line acc line)) state instructions)
+        (get :visited)
+        count)))
 
 (defn -main []
-  (printf "day 09 part 1: %d%n" (part1 "../../data/09.txt")))
-  ;; (printf "day 09 part 2: %d%n" (part2 "../../data/09.txt")))
+  (printf "day 09 part 1: %d%n" (part1 "../../data/09.txt"))
+  (printf "day 09 part 2: %d%n" (part2 "../../data/09.txt")))
