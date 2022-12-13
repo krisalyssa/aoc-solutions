@@ -1,8 +1,8 @@
 (ns aoc-2022.day-11
   (:gen-class))
 
-(require '[clojure.pprint :as pp]
-         '[clojure.string :as str])
+(require ;; '[clojure.pprint :as pp]
+ '[clojure.string :as str])
 
 ;; initialization functions
 
@@ -85,7 +85,7 @@
 
 (defn inspect-and-throw
   "Inspects an item and throws it."
-  [monkeys this-id]
+  [worry-reducer monkeys this-id]
   (let [this-monkey (monkeys this-id)
         items (:items this-monkey)
         this-monkey (assoc this-monkey :items (rest items))
@@ -93,7 +93,7 @@
         item (first items)
         rule (map (fn [token] (if (= token :old) item token)) (:rule this-monkey))
         item (apply (first rule) (rest rule))
-        item (quot item 3)
+        item (worry-reducer item)
         divisor (:divisor this-monkey)
         other-id (if (= 0 (rem item divisor)) (:on-true this-monkey) (:on-false this-monkey))
         other-monkey (monkeys other-id)
@@ -104,28 +104,28 @@
 
 (defn run-one-turn
   "Runs one turn for one monkey."
-  [monkeys id]
+  [worry-reducer monkeys id]
   (let [monkey (monkeys id)]
     (if (empty? (:items monkey))
       monkeys
-      (recur (inspect-and-throw monkeys id) id))))
+      (recur worry-reducer (inspect-and-throw worry-reducer monkeys id) id))))
 
 (defn run-one-round
   "Runs one round (one turn for each monkey)."
-  [monkeys]
-  (reduce run-one-turn monkeys (sort (keys monkeys))))
+  [worry-reducer monkeys]
+  (reduce (partial run-one-turn worry-reducer) monkeys (sort (keys monkeys))))
 
 (defn run-n-rounds
   "Runs multiple rounds."
-  [monkeys n]
-  (reduce (fn [monkeys _] (run-one-round monkeys)) monkeys (range n)))
+  [worry-reducer monkeys n]
+  (reduce (fn [monkeys _] (run-one-round worry-reducer monkeys)) monkeys (range n)))
 
 (defn part1 [filename]
   (as-> filename value
     (read-file value)
     (partition-lines value)
     (parse-monkeys value)
-    (run-n-rounds value 20)
+    (run-n-rounds (fn [v] (quot v 3)) value 20)
     (map :inspections (vals value))
     (sort value)
     (take-last 2 value)
