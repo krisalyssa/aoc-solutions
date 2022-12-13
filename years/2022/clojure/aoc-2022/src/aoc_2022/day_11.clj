@@ -22,6 +22,30 @@
   []
   {:inspections 0})
 
+;; utility functions
+
+;; https://stackoverflow.com/a/3080718/688981
+(defn gcd
+  ([x y]
+   (cond (zero? x) y
+         (< y x)   (recur y x)
+         :else     (recur x (rem y x))))
+  ([x y & zs]
+   (reduce gcd (gcd x y) zs)))
+
+;; https://stackoverflow.com/a/3080718/688981
+(defn lcm
+  ([x y] (/ (* x y) (gcd x y)))
+  ([x y & zs]
+   (reduce lcm (lcm x y) zs)))
+
+(defn calculate-modulus
+  "Finds the least common multiple of the divisors for all the monkeys."
+  [monkeys]
+  (apply lcm (map :divisor (vals monkeys))))
+
+;; parse the input file
+
 (defn parse-monkey-divisor
   "Gets the factor by which the worry level of an item is diminished after the monkey inspects it."
   [line]
@@ -83,10 +107,13 @@
   [blocks]
   (reduce (fn [acc block] (let [monkey (parse-one-monkey block)] (assoc acc (:id monkey) monkey))) '{} blocks))
 
+;; make the monkeys do their thing
+
 (defn inspect-and-throw
   "Inspects an item and throws it."
   [worry-reducer monkeys this-id]
-  (let [this-monkey (monkeys this-id)
+  (let [modulus (calculate-modulus monkeys)
+        this-monkey (monkeys this-id)
         items (:items this-monkey)
         this-monkey (assoc this-monkey :items (rest items))
         this-monkey (update this-monkey :inspections inc)
@@ -94,6 +121,7 @@
         rule (map (fn [token] (if (= token :old) item token)) (:rule this-monkey))
         item (apply (first rule) (rest rule))
         item (worry-reducer item)
+        item (mod item modulus)
         divisor (:divisor this-monkey)
         other-id (if (= 0 (rem item divisor)) (:on-true this-monkey) (:on-false this-monkey))
         other-monkey (monkeys other-id)
@@ -121,22 +149,27 @@
   (reduce (fn [monkeys _] (run-one-round worry-reducer monkeys)) monkeys (range n)))
 
 (defn part1 [filename]
-  (as-> filename value
-    (read-file value)
-    (partition-lines value)
-    (parse-monkeys value)
-    (run-n-rounds (fn [v] (quot v 3)) value 20)
-    (map :inspections (vals value))
-    (sort value)
-    (take-last 2 value)
-    (apply * value)))
+  (let [lines (read-file filename)
+        blocks (partition-lines lines)]
+    (as-> blocks value
+      (parse-monkeys value)
+      (run-n-rounds (fn [v] (quot v 3)) value 20)
+      (map :inspections (vals value))
+      (sort value)
+      (take-last 2 value)
+      (apply * value))))
 
-;; (defn part2 [filename]
-;;   (let [state (execute-part-2 (read-file filename))
-;;         crt (reverse (get state :crt))
-;;         lines (partition 40 crt)]
-;;     (doseq [line lines] (println line))))
+(defn part2 [filename]
+  (let [lines (read-file filename)
+        blocks (partition-lines lines)]
+    (as-> blocks value
+      (parse-monkeys value)
+      (run-n-rounds identity value 10000)
+      (map :inspections (vals value))
+      (sort value)
+      (take-last 2 value)
+      (apply * value))))
 
 (defn -main []
-  (printf "day 11 part 1: %d%n" (part1 "../../data/11.txt")))
-  ;; (printf "day 11 part 2: %d%n" (part2 "../../data/11.txt")))
+  (printf "day 11 part 1: %d%n" (part1 "../../data/11.txt"))
+  (printf "day 11 part 2: %d%n" (part2 "../../data/11.txt")))
