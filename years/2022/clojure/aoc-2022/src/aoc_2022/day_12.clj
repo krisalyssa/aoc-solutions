@@ -75,14 +75,26 @@
   [cell]
   (= :end (:value cell)))
 
+(defn is-lowest-elevation?
+  "Returns `true` if the cell is at the lowest possible elevation."
+  [cell]
+  (= 97 (get-height cell)))
+
 (defn valid-coord?
   "Returns `true` if the coordinate is valid for the grid."
   [m [y x]]
   (and (>= y 0) (< y (matrix/row-count m)) (>= x 0) (< x (matrix/column-count m))))
 
 (defn not-too-high?
-  "Returns true if we can climb to the cell from here."
+  "Returns true if we can climb up to the cell from here."
   [here there]
+  (let [here-height (get-height here)
+        there-height (get-height there)]
+    (>= here-height (dec there-height))))
+
+(defn not-too-low?
+  "Returns true if we can climb up to here from the cell there."
+  [there here]
   (let [here-height (get-height here)
         there-height (get-height there)]
     (>= here-height (dec there-height))))
@@ -94,7 +106,7 @@
 
 (defn neighbors-of
   "Returns the neighbors of the cell which haven't been visited and can be climbed to."
-  [graph cell]
+  [graph cell climbable-pred]
   (let [y (:y cell)
         x (:x cell)
         this cell
@@ -105,25 +117,25 @@
     (as-> (set '()) neighbors
       (if (valid-coord? graph up)
         (let [that (get-cell graph up)]
-          (if (and (not-too-high? this that) (not-visited? that))
+          (if (and (climbable-pred this that) (not-visited? that))
             (conj neighbors that)
             neighbors))
         neighbors)
       (if (valid-coord? graph down)
         (let [that (get-cell graph down)]
-          (if (and (not-too-high? this that) (not-visited? that))
+          (if (and (climbable-pred this that) (not-visited? that))
             (conj neighbors that)
             neighbors))
         neighbors)
       (if (valid-coord? graph left)
         (let [that (get-cell graph left)]
-          (if (and (not-too-high? this that) (not-visited? that))
+          (if (and (climbable-pred this that) (not-visited? that))
             (conj neighbors that)
             neighbors))
         neighbors)
       (if (valid-coord? graph right)
         (let [that (get-cell graph right)]
-          (if (and (not-too-high? this that) (not-visited? that))
+          (if (and (climbable-pred this that) (not-visited? that))
             (conj neighbors that)
             neighbors))
         neighbors))))
@@ -166,7 +178,7 @@
 
 (defn bfs
   "Finds the shortest path through the map from S to E using a breadth-first search."
-  [graph start]
+  [graph start end-pred climbable-pred]
   (let [graph (unvisit-all graph)
         graph (visit graph start)
         start {:y (:y start) :x (:x start) :path (list start)}
@@ -174,23 +186,22 @@
     (loop [state initial-state
            candidate start]
       (let [this (get-cell (:graph state) [(:y candidate) (:x candidate)])]
-        (if (is-end? this)
+        (if (end-pred this)
           (:path candidate)
-          (let [new-state (reduce (fn [acc n] (make-queue-entry acc n (:path candidate))) state (neighbors-of (:graph state) this))
+          (let [new-state (reduce (fn [acc n] (make-queue-entry acc n (:path candidate))) state (neighbors-of (:graph state) this climbable-pred))
                 new-queue (pop (:queue new-state))]
             (recur (assoc new-state :queue new-queue) (peek new-queue))))))))
 
 (defn part1 [filename]
   (let [graph (as-grid (read-file filename))
         start (mfind graph is-start?)]
-    (dec (count (bfs graph start)))))
+    (dec (count (bfs graph start is-end? not-too-high?)))))
 
-;; (defn part2 [filename]
-;;   (let [grid (as-grid (read-file filename))
-;;         [row-count col-count] (matrix/shape grid)
-;;         row-col-seq (for [row-num (range row-count) col-num (range col-count)] [row-num col-num])]
-;;     (apply max (map (fn [[row-num col-num]] (scenic-score grid row-num col-num)) row-col-seq))))
+(defn part2 [filename]
+  (let [graph (as-grid (read-file filename))
+        start (mfind graph is-end?)]
+    (dec (count (bfs graph start is-lowest-elevation? not-too-low?)))))
 
 (defn -main []
-  (printf "day 12 part 1: %d%n" (part1 "../../data/12.txt")))
-  ;; (printf "day 12 part 2: %d%n" (part2 "../../data/12.txt")))
+  (printf "day 12 part 1: %d%n" (part1 "../../data/12.txt"))
+  (printf "day 12 part 2: %d%n" (part2 "../../data/12.txt")))
