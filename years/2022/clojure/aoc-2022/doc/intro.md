@@ -21,3 +21,5 @@ https://github.com/mikera/core.matrix : https://mikera.github.io/core.matrix/doc
 
 https://stackoverflow.com/questions/20379275/select-first-item-of-a-collection-that-satisfies-given-predicate-in-clojure
 https://admay.github.io/queues-in-clojure/
+
+https://clojure.github.io/data.json/
