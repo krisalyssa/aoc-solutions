@@ -15,8 +15,8 @@
     (is (= 1 (compare-sequences (json/read-str "[1,[2,[3,[4,[5,6,7]]]],8,9]") (json/read-str "[1,[2,[3,[4,[5,6,0]]]],8,9]")))))
 
   (testing "sample data"
-    (is (= 13 (part1 "../../data/13-sample.txt"))))
-    ;; (is (= 29 (part2 "../../data/13-sample.txt"))))
+    (is (= 13 (part1 "../../data/13-sample.txt")))
+    (is (= 140 (part2 "../../data/13-sample.txt"))))
   (testing "puzzle data"
-    (is (= 5588 (part1 "../../data/13.txt")))))
-    ;; (is (= 321 (part2 "../../data/13.txt")))))
+    (is (= 5588 (part1 "../../data/13.txt")))
+    (is (= 23958 (part2 "../../data/13.txt")))))

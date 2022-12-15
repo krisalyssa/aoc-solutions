@@ -54,16 +54,52 @@
                 head-comparison
                 (recur (rest left) (rest right)))))))
 
+;; utility functions
+
+(defn add-divider-packets
+  "Adds the divider packets."
+  [packets]
+  (->> packets
+       (cons [[2]])
+       (cons [[6]])))
+
+(defn add-indexes
+  "Adds 1-based indexes to a sequence of packets."
+  [packets]
+  (map (fn [idx val] [idx val]) (iterate inc 1) packets))
+
+(defn extract-indexes
+  "Gets just the indexes from the packets."
+  [packets]
+  (map (fn [[idx _]] idx) packets))
+
+(defn flatten-one-level
+  "Un-pairs the pairs of packets."
+  [packets]
+  (reduce (fn [acc [left right]] (cons left (cons right acc))) '() packets))
+
+(defn filter-divider-packets
+  "Gets just the divider packets."
+  [packets]
+  (filter (fn [[_ p]] (or (= p [[2]]) (= p [[6]]))) packets))
+
 (defn part1 [filename]
   (->> (to-json (partition-lines (read-file filename)))
-       (map (fn [idx val] [idx val]) (iterate inc 1))
+       (add-indexes)
        (filter (fn [[_ p]] (> 1 (compare-sequences (first p) (second p)))))
-       (map (fn [[idx _]] idx))
+       (extract-indexes)
        (apply +)))
 
-;; (defn part2 [filename]
-;;   (sum-top 3 (map #(reduce + %) (parse-lists filename))))
+(defn part2 [filename]
+  (->> (to-json (partition-lines (read-file filename)))
+       (flatten-one-level)
+       (add-divider-packets)
+       (sort compare-sequences)
+       (add-indexes)
+       (filter-divider-packets)
+       (extract-indexes)
+       (apply *)))
 
 (defn -main []
-  (printf "day 13 part 1: %d%n" (part1 "../../data/13.txt")))
-  ;; (printf "day 13 part 2: %d%n" (part2 "../../data/13.txt")))
+  (printf "day 13 part 1: %d%n" (part1 "../../data/13.txt"))
+  (printf "day 13 part 2: %d%n" (part2 "../../data/13.txt")))
