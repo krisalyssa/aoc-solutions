@@ -85,17 +85,20 @@
   (conj cave [x y]))
 
 (defn get-sand-move
-  ""
+  "Gets the next location a unit of sand can move to.
+   If the next location is off the bottom of the map (max Y plus 3), returns :freefall.
+   If all possible next locations are blocked, returns :stop."
   [cave [x y]]
   (let [down [x (inc y)]
         down-and-left [(dec x) (inc y)]
         down-and-right [(inc x) (inc y)]]
     (cond
+      (get cave [x y]) :stop
       (< (max-y cave) (second down)) :freefall
       (not (get cave down)) down
       (not (get cave down-and-left)) down-and-left
       (not (get cave down-and-right)) down-and-right
-      :else :stop)))
+      :else :drop)))
 
 (defn drop-sand
   "Drops a unit of sand into the cave."
@@ -103,9 +106,24 @@
   (loop [position [500 0]]
     (let [next-position (get-sand-move cave position)]
       (case next-position
-        :stop (add-sand cave position)
+        :stop :stop
+        :drop (add-sand cave position)
         :freefall :stop
         (recur next-position)))))
+
+(defn render-cave
+  [cave]
+  (let [x-min (min-x cave)
+        x-max (max-x cave)
+        y-max (max-y cave)]
+    (loop [x x-min y 0]
+      (let [value (get cave [x y])]
+        (cond
+          (> y y-max) (println "")
+          (> x x-max) (do (println "") (recur x-min (inc y)))
+          (and (= x 500) (= y 0)) (do (printf "+") (recur (inc x) y))
+          (nil? value) (do (printf ".") (recur (inc x) y))
+          :else  (do (printf "#") (recur (inc x) y)))))))
 
 (defn part1 [filename]
   (let [paths (map parse-line (read-file filename))
@@ -116,16 +134,19 @@
           (dec units)
           (recur new-cave (inc units)))))))
 
-;; (defn part2 [filename]
-;;   (->> (to-json (partition-lines (read-file filename)))
-;;        (flatten-one-level)
-;;        (add-divider-packets)
-;;        (sort compare-sequences)
-;;        (add-indexes)
-;;        (filter-divider-packets)
-;;        (extract-indexes)
-;;        (apply *)))
+(defn part2 [filename]
+  (let [paths (map parse-line (read-file filename))
+        initial-cave (draw-paths (set '()) paths)
+        floor-y (+ 2 (max-y initial-cave))
+        initial-cave (draw-one-path initial-cave [[(dec (- 500 floor-y)) floor-y] [(inc (+ 500 floor-y)) floor-y]])]
+    (loop [cave initial-cave units 1]
+      (let [new-cave (drop-sand cave)]
+        (if (= :stop new-cave)
+          (do (newline) (dec units))
+          (if (> units 30000)
+            (printf "%nstopping after %d units%n" (dec units))
+            (recur new-cave (inc units))))))))
 
 (defn -main []
-  (printf "day 14 part 1: %d%n" (part1 "../../data/14.txt")))
-  ;; (printf "day 14 part 2: %d%n" (part2 "../../data/14.txt")))
+  (printf "day 14 part 1: %d%n" (part1 "../../data/14.txt"))
+  (printf "day 14 part 2: %d%n" (part2 "../../data/14.txt")))
