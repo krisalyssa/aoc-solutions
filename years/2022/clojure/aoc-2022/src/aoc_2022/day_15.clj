@@ -123,7 +123,7 @@
 ;;   6. Iterate all of those points to see which one doesn't fall within any region.
 ;;
 ;; The problem space is bigger than I thought it would be, but still much smaller than a brute force approach would require.
-;; I was expecting the sample data to have a small handful of intersecting pairs of lines, but in fact there are 
+;; I was expecting the sample data to have a small handful of intersecting pairs of lines, but in fact there are
 ;; a maximum of (68 * 62 = 4216) intersecting pairs.
 
 (defn region-borders
@@ -184,8 +184,8 @@
                  (recur (cons (first region-lines) lines) (rest region-lines)))) (rest region-list)))))
 
 (defn separate-by-slope
-  "Partitions a list of line segments by slope."
-  "Fortunately, there are only two slopes, so we don't have to get fancy."
+  "Partitions a list of line segments by slope.
+   Fortunately, there are only two slopes, so we don't have to get fancy."
   [lines]
   {1 (filter (fn [line] (= 1 (:slope (slope-offset line)))) lines)
    -1 (filter (fn [line] (= -1 (:slope (slope-offset line)))) lines)})
