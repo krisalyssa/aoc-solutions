@@ -1,0 +1,11 @@
+#!/bin/bash
+
+usage() {
+  echo "usage: test [DAY]" 2>&1
+  exit 1
+}
+
+DAY=$1
+
+# lein test $@
+mix test
