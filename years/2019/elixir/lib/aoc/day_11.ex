@@ -3,8 +3,13 @@ defmodule AoC.Day11 do
 
   alias AoC.Intcode.{Interpreter, Memory, PaintingRobot}
 
-  def part_1 do
-    "../data/11.txt"
+  def run do
+    IO.puts("day 11 part 1: #{AoC.Day11.part_1("../data/11.txt")}")
+    IO.puts("day 11 part 2: #{AoC.Day11.part_2("../data/11.txt")}")
+  end
+
+  def part_1(filename) do
+    filename
     |> Memory.load_from_file()
     |> paint()
     |> Map.get(:known_panels)
@@ -12,8 +17,8 @@ defmodule AoC.Day11 do
     |> Enum.count()
   end
 
-  def part_2 do
-    "../data/11.txt"
+  def part_2(filename) do
+    filename
     |> Memory.load_from_file()
     |> paint(%{{0, 0} => :white})
     |> Map.get(:known_panels)

@@ -1,9 +1,14 @@
 defmodule AoC.Day12 do
   @moduledoc false
 
-  def part_1 do
+  def run do
+    IO.puts("day 12 part 1: #{AoC.Day12.part_1("../data/12.txt")}")
+    IO.puts("day 12 part 2: #{AoC.Day12.part_2("../data/12.txt")}")
+  end
+
+  def part_1(filename) do
     initial_states =
-      "../data/12.txt"
+      filename
       |> File.stream!()
       |> Enum.map(&String.trim/1)
       |> parse_input_data()
@@ -14,8 +19,8 @@ defmodule AoC.Day12 do
     |> total_energy()
   end
 
-  def part_2 do
-    "../data/12.txt"
+  def part_2(filename) do
+    filename
     |> File.stream!()
     |> Enum.map(&String.trim/1)
     |> parse_input_data()

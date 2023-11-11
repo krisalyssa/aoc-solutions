@@ -1,14 +1,19 @@
 defmodule AoC.Day04 do
   @moduledoc false
 
-  def part_1 do
+  def run do
+    IO.puts("day 04 part 1: #{AoC.Day04.part_1("../data/04.txt")}")
+    IO.puts("day 04 part 2: #{AoC.Day04.part_2("../data/04.txt")}")
+  end
+
+  def part_1(_filename) do
     236_491..713_787
     |> Enum.filter(&has_consecutive_digits?/1)
     |> Enum.filter(&is_monotonically_increasing?/1)
     |> Enum.count()
   end
 
-  def part_2 do
+  def part_2(_filename) do
     236_491..713_787
     |> Enum.filter(&has_consecutive_digits?/1)
     |> Enum.filter(&is_monotonically_increasing?/1)

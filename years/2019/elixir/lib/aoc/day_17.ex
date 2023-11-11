@@ -3,8 +3,13 @@ defmodule AoC.Day17 do
 
   alias AoC.Intcode.{Interpreter, Memory, VacuumRobot}
 
-  def part_1 do
-    "../data/17.txt"
+  def run do
+    IO.puts("day 17 part 1: #{AoC.Day17.part_1("../data/17.txt")}")
+    IO.puts("day 17 part 2: #{AoC.Day17.part_2("../data/17.txt")}")
+  end
+
+  def part_1(filename) do
+    filename
     |> Memory.load_from_file()
     |> generate_view()
     |> intersections()
@@ -12,7 +17,7 @@ defmodule AoC.Day17 do
     |> Enum.sum()
   end
 
-  def part_2 do
+  def part_2(filename) do
     programs =
       String.to_charlist(
         ## determine this in code, not by eye
@@ -24,7 +29,7 @@ defmodule AoC.Day17 do
       )
 
     %{dust_amount: dust_amount} =
-      "../data/17.txt"
+      filename
       |> Memory.load_from_file()
       |> Memory.write(0, 2)
       |> AoC.Day17.walk_scaffolding(programs)

@@ -3,8 +3,13 @@ defmodule AoC.Day13 do
 
   alias AoC.Intcode.{Arcade, Interpreter, Memory}
 
-  def part_1 do
-    "../data/13.txt"
+  def run do
+    IO.puts("day 13 part 1: #{AoC.Day13.part_1("../data/13.txt")}")
+    IO.puts("day 13 part 2: #{AoC.Day13.part_2("../data/13.txt")}")
+  end
+
+  def part_1(filename) do
+    filename
     |> Memory.load_from_file()
     |> play()
     |> Map.get(:tiles)
@@ -12,9 +17,9 @@ defmodule AoC.Day13 do
     |> Enum.count()
   end
 
-  def part_2 do
+  def part_2(_filename) do
     ## disabled for now, as it takes a long time to run
-    # "../data/13.txt"
+    # filename
     # |> Memory.load_from_file()
     # |> Memory.write(0, 2)
     # |> play()
