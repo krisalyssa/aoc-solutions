@@ -3,8 +3,13 @@ defmodule AoC.Day07 do
 
   alias AoC.Intcode.{Interpreter, Memory}
 
-  def part_1 do
-    memory = Memory.load_from_file("../data/07.txt")
+  def run do
+    IO.puts("day 07 part 1: #{AoC.Day07.part_1("../data/07.txt")}")
+    IO.puts("day 07 part 2: #{AoC.Day07.part_2("../data/07.txt")}")
+  end
+
+  def part_1(filename) do
+    memory = Memory.load_from_file(filename)
 
     [0, 1, 2, 3, 4]
     |> permute()
@@ -15,8 +20,8 @@ defmodule AoC.Day07 do
     |> Enum.max_by(fn output -> output end)
   end
 
-  def part_2 do
-    memory = Memory.load_from_file("../data/07.txt")
+  def part_2(filename) do
+    memory = Memory.load_from_file(filename)
 
     [5, 6, 7, 8, 9]
     |> permute()

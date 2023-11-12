@@ -1,8 +1,13 @@
 defmodule AoC.Day08 do
   @moduledoc false
 
-  def part_1 do
-    "../data/08.txt"
+  def run do
+    IO.puts("day 08 part 1: #{AoC.Day08.part_1("../data/08.txt")}")
+    IO.puts("day 08 part 2: #{AoC.Day08.part_2("../data/08.txt")}")
+  end
+
+  def part_1(filename) do
+    filename
     |> load_image_data()
     |> Enum.map(fn pixels -> Enum.group_by(pixels, fn pixel -> pixel end) end)
     |> Enum.map(&reduce_to_pixel_count/1)
@@ -10,8 +15,8 @@ defmodule AoC.Day08 do
     |> (fn counts -> Map.get(counts, 1, 0) * Map.get(counts, 2, 0) end).()
   end
 
-  def part_2 do
-    "../data/08.txt"
+  def part_2(filename) do
+    filename
     |> load_image_data()
     |> Enum.zip()
     |> Enum.map(&Tuple.to_list/1)

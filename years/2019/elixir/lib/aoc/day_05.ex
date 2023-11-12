@@ -3,10 +3,15 @@ defmodule AoC.Day05 do
 
   alias AoC.Intcode.{Interpreter, Memory}
 
-  def part_1 do
+  def run do
+    IO.puts("day 05 part 1: #{AoC.Day05.part_1("../data/05.txt")}")
+    IO.puts("day 05 part 2: #{AoC.Day05.part_2("../data/05.txt")}")
+  end
+
+  def part_1(filename) do
     {:ok, agent} = Agent.start_link(fn -> nil end)
     output_fn = fn value -> Agent.update(agent, fn _ -> value end) end
-    memory = Memory.load_from_file("../data/05.txt")
+    memory = Memory.load_from_file(filename)
 
     vm =
       Task.async(Interpreter, :initialize, [
@@ -22,10 +27,10 @@ defmodule AoC.Day05 do
     result
   end
 
-  def part_2 do
+  def part_2(filename) do
     {:ok, agent} = Agent.start_link(fn -> nil end)
     output_fn = fn value -> Agent.update(agent, fn _ -> value end) end
-    memory = Memory.load_from_file("../data/05.txt")
+    memory = Memory.load_from_file(filename)
 
     vm =
       Task.async(Interpreter, :initialize, [

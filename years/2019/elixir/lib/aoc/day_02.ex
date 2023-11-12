@@ -3,9 +3,14 @@ defmodule AoC.Day02 do
 
   alias AoC.Intcode.{Interpreter, Memory}
 
-  def part_1 do
+  def run do
+    IO.puts("day 02 part 1: #{AoC.Day02.part_1("../data/02.txt")}")
+    IO.puts("day 02 part 2: #{AoC.Day02.part_2("../data/02.txt")}")
+  end
+
+  def part_1(filename) do
     initial_memory =
-      "../data/02.txt"
+      filename
       |> Memory.load_from_file()
       |> set_noun(12)
       |> set_verb(2)
@@ -15,8 +20,8 @@ defmodule AoC.Day02 do
     Memory.read(final_memory, 0)
   end
 
-  def part_2 do
-    memory = Memory.load_from_file("../data/02.txt")
+  def part_2(filename) do
+    memory = Memory.load_from_file(filename)
 
     results =
       for noun <- 0..99, verb <- 0..99 do

@@ -3,15 +3,20 @@ defmodule AoC.Day03 do
   https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
   """
 
-  def part_1 do
-    "../data/03.txt"
+  def run do
+    IO.puts("day 03 part 1: #{AoC.Day03.part_1("../data/03.txt")}")
+    IO.puts("day 03 part 2: #{AoC.Day03.part_2("../data/03.txt")}")
+  end
+
+  def part_1(filename) do
+    filename
     |> load_paths_from_file()
     |> closest_intersection()
     |> manhattan_distance({0, 0})
   end
 
-  def part_2 do
-    "../data/03.txt"
+  def part_2(filename) do
+    filename
     |> load_paths_from_file()
     |> shortest_path()
   end
