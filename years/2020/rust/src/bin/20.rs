@@ -6,7 +6,7 @@ use std::str::FromStr;
 pub fn main() {
   let mut data: Vec<String> = vec![];
 
-  if common::load_data("data/day-20-input.txt", &mut data).is_ok() {
+  if common::load_data("../data/20.txt", &mut data).is_ok() {
     let part_1 = Part::new(part_1);
     let part_2 = Part::new(part_2);
 
@@ -19,7 +19,7 @@ pub fn main() {
 
     println!("{}", day.to_string());
   } else {
-    eprintln!("cannot open data/day-20-input.txt");
+    eprintln!("cannot open ../data/20.txt");
     std::process::exit(1);
   }
 }

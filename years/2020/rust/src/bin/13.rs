@@ -3,7 +3,7 @@ use common::{Day, Part};
 pub fn main() {
   let mut data: Vec<String> = vec![];
 
-  if common::load_data("data/day-13-input.txt", &mut data).is_ok() {
+  if common::load_data("../data/13.txt", &mut data).is_ok() {
     let part_1 = Part::new(part_1);
     let part_2 = Part::new(part_2);
 
@@ -16,7 +16,7 @@ pub fn main() {
 
     println!("{}", day.to_string());
   } else {
-    eprintln!("cannot open data/day-13-input.txt");
+    eprintln!("cannot open ../data/13.txt");
     std::process::exit(1);
   }
 }

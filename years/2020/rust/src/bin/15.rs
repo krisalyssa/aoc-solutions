@@ -9,7 +9,7 @@ pub fn main() {
   // This day's puzzle input was hardcoded into the puzzle page rather than being available for download.
   // In order to use the existing harness, I saved the puzzle input to a file, one number per line.
 
-  if common::load_data("data/day-15-input.txt", &mut data).is_ok() {
+  if common::load_data("../data/15.txt", &mut data).is_ok() {
     let part_1 = Part::new(part_1);
     let part_2 = Part::new(part_2);
 
@@ -22,7 +22,7 @@ pub fn main() {
 
     println!("{}", day.to_string());
   } else {
-    eprintln!("cannot open data/day-15-input.txt");
+    eprintln!("cannot open ../data/15.txt");
     std::process::exit(1);
   }
 }
