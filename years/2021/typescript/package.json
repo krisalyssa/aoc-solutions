@@ -30,7 +30,7 @@
 	"scripts": {
 		"help": "ts-node init.ts -h",
 		"seed": "ts-node init.ts seed",
-		"solve": "ts-node run.ts",
+		"solve": "ts-node bin/run.ts",
 		"submit": "ts-node submit.ts",
 		"suck": "ts-node init.ts suck",
 		"test": "echo \"Error: no test specified\" && exit 1"
