@@ -113,9 +113,9 @@ export function getDataRoot(day: number, year: number, rootDir = path.join(getAp
 	return rootDir;
 }
 
-export function getDayRoot(day: number, year: number, rootDir = path.join(getAppRoot(), "years")) {
+export function getDayModule(day: number, year: number, rootDir = getAppRoot()) {
 	const dayWithLeadingZeros = String(day).padStart(2, "0");
-	return path.join(rootDir, String(year), dayWithLeadingZeros);
+	return path.join(rootDir, "src", dayWithLeadingZeros);
 }
 
 export function getProblemUrl(day: number, year: number) {

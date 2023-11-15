@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { performance } from "perf_hooks";
-import { log, logSolution } from "../../../util/log";
-import * as test from "../../../util/test";
-import * as util from "../../../util/util";
+import { log, logSolution } from "../util/log";
+import * as test from "../util/test";
+import * as util from "../util/util";
 
 const YEAR = 2021;
 const DAY = 2;
@@ -15,7 +15,7 @@ async function p2021day2_part1(input: string, ...params: any[]) {
 	let h = 0;
 	let v = 0;
 
-	util.lineify(input).forEach((s) => {
+	util.lineify(input).forEach(s => {
 		const instruction = s.match(/(forward|down|up)\s+(\d+)/);
 		if (instruction) {
 			const direction = instruction[1];
@@ -45,7 +45,7 @@ async function p2021day2_part2(input: string, ...params: any[]) {
 	let v = 0;
 	let aim = 0;
 
-	util.lineify(input).forEach((s) => {
+	util.lineify(input).forEach(s => {
 		const instruction = s.match(/(forward|down|up)\s+(\d+)/);
 		if (instruction) {
 			const direction = instruction[1];
@@ -54,7 +54,7 @@ async function p2021day2_part2(input: string, ...params: any[]) {
 			switch (direction) {
 				case "forward":
 					h += amount;
-					v += (aim * amount);
+					v += aim * amount;
 					break;
 
 				case "down":
@@ -79,18 +79,18 @@ forward 8
 up 3
 down 8
 forward 2
-`
+`;
 	const part1tests: TestCase[] = [
 		{
 			input: testData,
-			expected: "150"
-		}
+			expected: "150",
+		},
 	];
 	const part2tests: TestCase[] = [
 		{
 			input: testData,
-			expected: "900"
-		}
+			expected: "900",
+		},
 	];
 
 	// Run tests
@@ -114,7 +114,7 @@ forward 2
 	const part1Solution = String(await p2021day2_part1(input));
 	const part1After = performance.now();
 
-	const part2Before = performance.now()
+	const part2Before = performance.now();
 	const part2Solution = String(await p2021day2_part2(input));
 	const part2After = performance.now();
 

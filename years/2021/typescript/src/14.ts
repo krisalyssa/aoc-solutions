@@ -1,22 +1,22 @@
-import chalk from "chalk"
-import { performance } from "perf_hooks"
-import { log, logSolution } from "../../../util/log"
-import * as test from "../../../util/test"
-import * as util from "../../../util/util"
+import chalk from "chalk";
+import { performance } from "perf_hooks";
+import { log, logSolution } from "../util/log";
+import * as test from "../util/test";
+import * as util from "../util/util";
 
-const YEAR = 2021
-const DAY = 14
+const YEAR = 2021;
+const DAY = 14;
 
 // solution path: /Users/ccottingham/Projects/advent-of-code/2021/years/2021/14/index.ts
 // data path    : /Users/ccottingham/Projects/advent-of-code/2021/years/2021/14/data.txt
 // problem url  : https://adventofcode.com/2021/day/14
 
 async function p2021day14_part1(input: string, ...params: any[]) {
-	return polymerize(input, params[0] || 10)
+	return polymerize(input, params[0] || 10);
 }
 
 async function p2021day14_part2(input: string, ...params: any[]) {
-	return polymerize(input, params[0] || 40)
+	return polymerize(input, params[0] || 40);
 }
 
 /**
@@ -27,21 +27,21 @@ async function p2021day14_part2(input: string, ...params: any[]) {
  * @returns        an updated copy of counts
  */
 function applyRules(rules: Map<string, string>, counts: Map<string, number>): Map<string, number> {
-	const newCounts = new Map<string, number>()
+	const newCounts = new Map<string, number>();
 	for (let [pair, inserted] of rules) {
 		if (counts.has(pair)) {
-			const pairCount = counts.get(pair)!
+			const pairCount = counts.get(pair)!;
 			// NN -> C becomes NN -> NC, CN
 			// pair = NN
 			// inserted = C
-			const chars = pair.split("")
-			const keyLeft = `${chars[0]}${inserted}`
-			const keyRight = `${inserted}${chars[1]}`
-			newCounts.set(keyLeft, (newCounts.get(keyLeft) || 0) + pairCount)
-			newCounts.set(keyRight, (newCounts.get(keyRight) || 0) + pairCount)
+			const chars = pair.split("");
+			const keyLeft = `${chars[0]}${inserted}`;
+			const keyRight = `${inserted}${chars[1]}`;
+			newCounts.set(keyLeft, (newCounts.get(keyLeft) || 0) + pairCount);
+			newCounts.set(keyRight, (newCounts.get(keyRight) || 0) + pairCount);
 		}
 	}
-	return newCounts
+	return newCounts;
 }
 
 /**
@@ -55,14 +55,14 @@ function applyRules(rules: Map<string, string>, counts: Map<string, number>): Ma
  * @returns      an array of chunks
  */
 function chunkString(str: String, size: number): string[] {
-	const chunks = new Array<string>()
+	const chunks = new Array<string>();
 
 	for (let i = 0; i < str.length - size + 1; ++i) {
-		chunks.push(str.slice(i, i + size))
+		chunks.push(str.slice(i, i + size));
 	}
-	chunks.push(str.at(-1)!)
+	chunks.push(str.at(-1)!);
 
-	return chunks
+	return chunks;
 }
 
 /**
@@ -72,7 +72,10 @@ function chunkString(str: String, size: number): string[] {
  * @returns         a map of unit pairs to the number of times each appears in the polymer
  */
 function countChunks(polymer: String): Map<string, number> {
-	return chunkString(polymer, 2).reduce((acc, chunk) => acc.set(chunk, (acc.get(chunk) || 0) + 1), new Map<string, number>())
+	return chunkString(polymer, 2).reduce(
+		(acc, chunk) => acc.set(chunk, (acc.get(chunk) || 0) + 1),
+		new Map<string, number>()
+	);
 }
 
 /**
@@ -82,12 +85,12 @@ function countChunks(polymer: String): Map<string, number> {
  * @returns				 a map of units to the number of times each appears in the polymer
  */
 function countUnits(counts: Map<string, number>): Map<string, number> {
-	const unitCounts = new Map<string, number>()
+	const unitCounts = new Map<string, number>();
 	for (let [pair, count] of counts.entries()) {
-		const units = pair.split("")
-		unitCounts.set(units[0], (unitCounts.get(units[0]) || 0) + count)
+		const units = pair.split("");
+		unitCounts.set(units[0], (unitCounts.get(units[0]) || 0) + count);
 	}
-	return unitCounts
+	return unitCounts;
 }
 
 // Work smarter, not harder?
@@ -183,28 +186,28 @@ function countUnits(counts: Map<string, number>): Map<string, number> {
  * @returns            the difference between the counts of the most common unit and the least common unit
  */
 function polymerize(input: string, iterations: number): number {
-	const data = util.lineify(input.trim(), true)
-	const template = data[0]
-	const rules =
-		data.slice(2)
-		  	.map((line) => line.match(/(\S+)\s+->\s+(\S+)/)?.slice(1, 3))
-			  .reduce((acc, rule) => acc.set(rule![0], rule![1]), new Map<string, string>())
+	const data = util.lineify(input.trim(), true);
+	const template = data[0];
+	const rules = data
+		.slice(2)
+		.map(line => line.match(/(\S+)\s+->\s+(\S+)/)?.slice(1, 3))
+		.reduce((acc, rule) => acc.set(rule![0], rule![1]), new Map<string, string>());
 
-	let counts = countChunks(template)
+	let counts = countChunks(template);
 
 	for (let i = 0; i < iterations; ++i) {
-		counts = applyRules(rules, counts)
+		counts = applyRules(rules, counts);
 	}
 
-	const lastUnit = template.at(-1)
-	counts.set(lastUnit!, (counts.get(lastUnit!) || 0) + 1)
+	const lastUnit = template.at(-1);
+	counts.set(lastUnit!, (counts.get(lastUnit!) || 0) + 1);
 
-	const unitCounts = countUnits(counts)
+	const unitCounts = countUnits(counts);
 
-	const maxCount = util.max(Array.from(unitCounts.values())).value
-	const minCount = util.min(Array.from(unitCounts.values())).value
+	const maxCount = util.max(Array.from(unitCounts.values())).value;
+	const minCount = util.min(Array.from(unitCounts.values())).value;
 
-	return maxCount - minCount
+	return maxCount - minCount;
 }
 
 async function run() {
@@ -227,57 +230,57 @@ BB -> N
 BC -> B
 CC -> N
 CN -> C
-	`
+	`;
 	const part1tests: TestCase[] = [
 		{
 			input: testData,
-			expected: "1588"
-		}
-	]
+			expected: "1588",
+		},
+	];
 	const part2tests: TestCase[] = [
 		{
 			input: testData,
-			expected: "2188189693529"
-		}
-	]
+			expected: "2188189693529",
+		},
+	];
 
 	// Run tests
-	test.beginTests()
+	test.beginTests();
 	await test.section(async () => {
 		for (const testCase of part1tests) {
-			test.logTestResult(testCase, String(await p2021day14_part1(testCase.input, ...(testCase.extraArgs || []))))
+			test.logTestResult(testCase, String(await p2021day14_part1(testCase.input, ...(testCase.extraArgs || []))));
 		}
-	})
+	});
 	await test.section(async () => {
 		for (const testCase of part2tests) {
-			test.logTestResult(testCase, String(await p2021day14_part2(testCase.input, ...(testCase.extraArgs || []))))
+			test.logTestResult(testCase, String(await p2021day14_part2(testCase.input, ...(testCase.extraArgs || []))));
 		}
-	})
-	test.endTests()
+	});
+	test.endTests();
 
 	// Get input and run program while measuring performance
-	const input = await util.getInput(DAY, YEAR)
+	const input = await util.getInput(DAY, YEAR);
 
-	const part1Before = performance.now()
-	const part1Solution = String(await p2021day14_part1(input))
-	const part1After = performance.now()
+	const part1Before = performance.now();
+	const part1Solution = String(await p2021day14_part1(input));
+	const part1After = performance.now();
 
-	const part2Before = performance.now()
-	const part2Solution = String(await p2021day14_part2(input))
-	const part2After = performance.now()
+	const part2Before = performance.now();
+	const part2Solution = String(await p2021day14_part2(input));
+	const part2After = performance.now();
 
-	logSolution(14, 2021, part1Solution, part2Solution)
+	logSolution(14, 2021, part1Solution, part2Solution);
 
-	log(chalk.gray("--- Performance ---"))
-	log(chalk.gray(`Part 1: ${util.formatTime(part1After - part1Before)}`))
-	log(chalk.gray(`Part 2: ${util.formatTime(part2After - part2Before)}`))
-	log()
+	log(chalk.gray("--- Performance ---"));
+	log(chalk.gray(`Part 1: ${util.formatTime(part1After - part1Before)}`));
+	log(chalk.gray(`Part 2: ${util.formatTime(part2After - part2Before)}`));
+	log();
 }
 
 run()
 	.then(() => {
-		process.exit()
+		process.exit();
 	})
 	.catch(error => {
-		throw error
-	})
+		throw error;
+	});

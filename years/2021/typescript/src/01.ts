@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { performance } from "perf_hooks";
-import { log, logSolution } from "../../../util/log";
-import * as test from "../../../util/test";
-import * as util from "../../../util/util";
+import { log, logSolution } from "../util/log";
+import * as test from "../util/test";
+import * as util from "../util/util";
 
 const YEAR = 2021;
 const DAY = 1;
@@ -12,16 +12,18 @@ const DAY = 1;
 // problem url  : https://adventofcode.com/2021/day/1
 
 async function p2021day1_part1(input: string, ...params: any[]) {
-	return util.windows(util.numberify(input), 2)
-						 .map((pair) => (pair[0] < pair[1] ? 1 : 0) as number)
-						 .reduce((acc, v) => acc + v, 0);
+	return util
+		.windows(util.numberify(input), 2)
+		.map(pair => (pair[0] < pair[1] ? 1 : 0) as number)
+		.reduce((acc, v) => acc + v, 0);
 }
 
 async function p2021day1_part2(input: string, ...params: any[]) {
-	const values = util.windows(util.numberify(input), 3).map((window) => window.reduce((acc, v) => acc + v))
-	return util.windows(values, 2)
-						 .map((pair) => (pair[0] < pair[1] ? 1 : 0) as number)
-						 .reduce((acc, v) => acc + v, 0);
+	const values = util.windows(util.numberify(input), 3).map(window => window.reduce((acc, v) => acc + v));
+	return util
+		.windows(values, 2)
+		.map(pair => (pair[0] < pair[1] ? 1 : 0) as number)
+		.reduce((acc, v) => acc + v, 0);
 }
 
 async function run() {
@@ -35,18 +37,18 @@ async function run() {
 240
 269
 260
-263`
+263`;
 	const part1tests: TestCase[] = [
 		{
 			input: testData,
-			expected: "7"
-		}
+			expected: "7",
+		},
 	];
 	const part2tests: TestCase[] = [
 		{
 			input: testData,
-			expected: "5"
-		}
+			expected: "5",
+		},
 	];
 
 	// Run tests
@@ -70,7 +72,7 @@ async function run() {
 	const part1Solution = String(await p2021day1_part1(input));
 	const part1After = performance.now();
 
-	const part2Before = performance.now()
+	const part2Before = performance.now();
 	const part2Solution = String(await p2021day1_part2(input));
 	const part2After = performance.now();
 

@@ -1,5 +1,4 @@
 import chalk from "chalk";
-import path from "path";
 import * as LOGUTIL from "./util/log";
 import * as TESTUTIL from "./util/test";
 import * as util from "./util/util";
@@ -49,7 +48,7 @@ TESTUTIL.setNoTests(noTests);
 if (year === 0 && day === 0) {
 	({ year, day } = util.getLatestPuzzleDate());
 }
-const puzzleFile = path.join(util.getDayRoot(day, year), "index");
+const puzzleFile = util.getDayModule(day, year);
 log(chalk`\n== Running puzzle {cyan ${year}.${day}}${debug ? `(${puzzleFile}) [Debug ON]` : ""} ==\n`);
 require(puzzleFile);
 
