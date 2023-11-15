@@ -1,8 +1,7 @@
-import * as util from "./util/util";
-import path from "path";
-import * as LOGUTIL from "./util/log";
-import * as TESTUTIL from "./util/test";
 import chalk from "chalk";
+import * as LOGUTIL from "../util/log";
+import * as TESTUTIL from "../util/test";
+import * as util from "../util/util";
 const { log } = LOGUTIL;
 
 let debug = false;
@@ -49,8 +48,8 @@ TESTUTIL.setNoTests(noTests);
 if (year === 0 && day === 0) {
 	({ year, day } = util.getLatestPuzzleDate());
 }
-const puzzleFile = path.join(util.getDayRoot(day, year), "index");
-log(chalk`\n== Running puzzle {cyan ${year}.${day}}${debug ? " [Debug ON]" : ""} ==\n`);
+const puzzleFile = util.getDayModule(day, year);
+log(chalk`\n== Running puzzle {cyan ${year}.${day}}${debug ? `(${puzzleFile}) [Debug ON]` : ""} ==\n`);
 require(puzzleFile);
 
 function usage() {
@@ -58,19 +57,19 @@ function usage() {
 	Runs your solution for the problem for the given <year, day>. If
 	executed without arguments, it will attempt to run the most
 	recently-released Advent of Code puzzle.
-  
+
 	Usage:
 	  ts-node run.ts [<year> <day>]
-  
+
 	Arguments:
 	  year: a 4-digit number greater than or equal to 2015
 	  day: a number between 1 and 25, inclusive
-  
+
 	Options:
 	  --help, -h: Show this help message.
 	  --debug, -d: Print debug/trace messages.
 	  --no-tests, -n: Don't run tests.
-  
+
 	Examples:
 	  ts-node run.ts
 	  ts-node run.ts 2018 22

@@ -1,8 +1,8 @@
-import Flatten from "@flatten-js/core"
-import crypto from "crypto"
-import { existsSync } from "fs"
-import * as fs from "fs/promises"
-import * as path from "path"
+import Flatten from "@flatten-js/core";
+import crypto from "crypto";
+import { existsSync } from "fs";
+import * as fs from "fs/promises";
+import * as path from "path";
 
 /**
  * Helper to run multiple search-and-replace operations within a string.
@@ -109,18 +109,23 @@ export function getAppRoot() {
 	return currentDir;
 }
 
-export function getDayRoot(day: number, year: number, rootDir = path.join(getAppRoot(), "years")) {
+export function getDataRoot(day: number, year: number, rootDir = path.join(getAppRoot(), "../data")) {
+	return rootDir;
+}
+
+export function getDayModule(day: number, year: number, rootDir = getAppRoot()) {
 	const dayWithLeadingZeros = String(day).padStart(2, "0");
-	return path.join(rootDir, String(year), dayWithLeadingZeros);
+	return path.join(rootDir, "src", dayWithLeadingZeros);
 }
 
 export function getProblemUrl(day: number, year: number) {
 	return `https://adventofcode.com/${year}/day/${day}`;
 }
 
-export async function getInput(day: number, year: number, rootDir = path.join(getAppRoot(), "years")) {
-	const dayRoot = getDayRoot(day, year, rootDir);
-	return fs.readFile(path.join(dayRoot, "data.txt"), "utf-8");
+export async function getInput(day: number, year: number, rootDir = path.join(getAppRoot(), "../data")) {
+	const dataRoot = getDataRoot(day, year, rootDir);
+	const dayWithLeadingZeros = String(day).padStart(2, "0");
+	return fs.readFile(path.join(dataRoot, `${dayWithLeadingZeros}.txt`), "utf-8");
 }
 
 export function clamp(val: number, min: number, max: number) {
@@ -305,9 +310,7 @@ export function* getSumSubsets(elems: number[], target: number, level: number = 
 /**
  * Returns the count of each unique element in the array
  */
-export function countUniqueElements(
-	iterable: Iterable<string>
-): {
+export function countUniqueElements(iterable: Iterable<string>): {
 	[elem: string]: number;
 } {
 	const result: { [elem: string]: number } = {};
@@ -377,48 +380,54 @@ export function md5(input: string) {
 }
 
 export function lineify(input: string, raw: boolean = false): string[] {
-	const splitter = raw ? /\n/ : /\n+/
-	return input.trim().split(splitter).map((s) => s.trim())
+	const splitter = raw ? /\n/ : /\n+/;
+	return input
+		.trim()
+		.split(splitter)
+		.map(s => s.trim());
 }
 
 export function numberify(input: string, radix = 10): number[] {
-	return input.trim().split(/[,\s]+/).map((s) => parseInt(s, radix))
+	return input
+		.trim()
+		.split(/[,\s]+/)
+		.map(s => parseInt(s, radix));
 }
 
 export function regexify(input: string, regex: RegExp): RegExpExecArray | null {
-	return regex.exec(input)
+	return regex.exec(input);
 }
 
 export function segmentify(input: string, separator = /\s+->\s+/): Flatten.Segment[] {
-	return input.trim().split(/\n+/).map((s) => {
-		const [p1, p2] = s.split(separator, 2).map((p) => {
-			const [x, y] = p.split(/,/, 2).map((n) => parseInt(n))
-			return new Flatten.Point(x, y)
-		})
-		return new Flatten.Segment(p1, p2)
-	})
+	return input
+		.trim()
+		.split(/\n+/)
+		.map(s => {
+			const [p1, p2] = s.split(separator, 2).map(p => {
+				const [x, y] = p.split(/,/, 2).map(n => parseInt(n));
+				return new Flatten.Point(x, y);
+			});
+			return new Flatten.Segment(p1, p2);
+		});
 }
 
 export function replacer(_key: any, value: any) {
-  if (value instanceof Map) {
-    return {
-      dataType: 'Map',
-      value: Array.from(value.entries())
-    }
+	if (value instanceof Map) {
+		return {
+			dataType: "Map",
+			value: Array.from(value.entries()),
+		};
 	} else if (value instanceof Set) {
 		return {
-			dataType: 'Set',
-			value: Array.from(value.entries()).map(([k, _v]) => k)
-		}
-  } else {
-    return value
-  }
+			dataType: "Set",
+			value: Array.from(value.entries()).map(([k, _v]) => k),
+		};
+	} else {
+		return value;
+	}
 }
 
 // https://stackoverflow.com/a/59322890/688981
 export function windows<T>(arr: T[], size: number): T[][] {
-	return Array.from(
-    {length: arr.length - (size - 1)},
-    (_, index) => arr.slice(index, index + size)
-  )
+	return Array.from({ length: arr.length - (size - 1) }, (_, index) => arr.slice(index, index + size));
 }

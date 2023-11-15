@@ -1,13 +1,12 @@
+import chalk from "chalk";
 import fetch from "cross-fetch";
-import { getAppRoot, replaceAll, wait, getDayRoot, getProblemUrl, getLatestPuzzleDate, formatTime } from "./util/util";
-import playwright from "playwright-chromium";
+import { existsSync } from "fs";
+import * as fs from "fs/promises";
+import mkdirp from "mkdirp";
 import { LocalStorage } from "node-localstorage";
 import * as path from "path";
-import mkdirp from "mkdirp";
-import chalk from "chalk";
-import * as fs from "fs/promises";
-import { existsSync, mkdir } from "fs";
 import { getSessionToken } from "./getToken";
+import { formatTime, getAppRoot, getDataRoot, getLatestPuzzleDate, getProblemUrl, replaceAll, wait } from "./util/util";
 
 interface Settings {
 	pristine: boolean;
@@ -41,7 +40,7 @@ suck             : Suck in problem data from adventofcode.com.
                    absolute path. Defaults to {app_root}/years.
 --template       : Specify path to solution seed template. Template file
                    name must end in in the format ".xx.dat", where xx can
-                   be any extension. All solution files generated will 
+                   be any extension. All solution files generated will
                    have an extension of ".xx". Must supply full, absolute
                    path. Defaults to {app_root}/solutionTemplate.ts.dat.
 --compare-with   : Optional template to compare with to make template
@@ -97,12 +96,12 @@ async function getDayData(day: number, year: number): Promise<string> {
 }
 
 function getDataPath(day: number, year: number) {
-	const dataDir = getDayRoot(day, year, settings.rootPath);
+	const dataDir = getDataRoot(day, year, settings.rootPath);
 	return path.join(dataDir, "data.txt");
 }
 
 function getSolutionPath(day: number, year: number) {
-	const dataDir = getDayRoot(day, year, settings.rootPath);
+	const dataDir = getDataRoot(day, year, settings.rootPath);
 	const templatePath = settings.templatePath;
 	const templateExtension = path.extname(templatePath.substr(0, templatePath.length - 4));
 	return path.join(dataDir, `index${templateExtension}`);
@@ -252,10 +251,7 @@ async function run() {
 						"The latest puzzle won't be released for more than 1 day. Use --wait only within 1 day of next puzzle release."
 				);
 			} else {
-				const releaseTime = getReleaseTime(
-					latestPuzzleAsOfTomorrow.day,
-					latestPuzzleAsOfTomorrow.year
-				);
+				const releaseTime = getReleaseTime(latestPuzzleAsOfTomorrow.day, latestPuzzleAsOfTomorrow.year);
 				// Wait an extra few seconds just in case the system clock is off by a bit.
 				// The player will need to read the problem anyway.
 				const toWait = releaseTime.getTime() - new Date().getTime() + 5000;
