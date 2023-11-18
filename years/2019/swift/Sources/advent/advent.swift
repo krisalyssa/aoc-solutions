@@ -13,9 +13,9 @@ struct Advent: ParsableCommand {
 
   mutating func run() throws {
     let runner: DayRunner = days[day]!
-    let startTime = Date()
+    // let startTime = Date()
     runner.run()
-    let endTime = Date()
-    print("Time: \(endTime.timeIntervalSince(startTime))")
+    // let endTime = Date()
+    // print("Time: \(endTime.timeIntervalSince(startTime))")
   }
 }
