@@ -12,9 +12,11 @@ let package = Package(
   ],
 
   dependencies: [
-    .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.0.0"),
+    .package(url: "https://github.com/CraigCottingham/swift-aoc-common.git", from: "0.4.0"),
+    // .package(path: "../../../../swift-aoc-common"),
+    // .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.0.0"),
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.0"),
-    .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.2"),
+    // .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.2"),
   ],
 
   targets: [
@@ -25,13 +27,18 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]),
 
-    .target(name: "AoC", dependencies: ["CoreLibraries"]),
+    .target(
+      name: "AoC",
+      dependencies: [
+        .product(name: "Common", package: "swift-aoc-common"),
+        "CoreLibraries",
+      ]),
 
     .target(
       name: "CoreLibraries",
       dependencies: [
-        .product(name: "Algorithms", package: "swift-algorithms"),
-        .product(name: "Collections", package: "swift-collections"),
+        // .product(name: "Algorithms", package: "swift-algorithms"),
+        // .product(name: "Collections", package: "swift-collections"),
       ]),
 
     .testTarget(name: "AoCTests", dependencies: ["AoC"]),
