@@ -42,10 +42,7 @@ let package = Package(
 
     .target(
       name: "CoreLibraries",
-      dependencies: [
-        // .product(name: "Algorithms", package: "swift-algorithms"),
-        // .product(name: "Collections", package: "swift-collections"),
-      ]),
+      dependencies: []),
 
     .testTarget(name: "AoCTests", dependencies: ["AoC"]),
   ]
