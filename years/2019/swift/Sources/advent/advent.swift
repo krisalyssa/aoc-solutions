@@ -1,8 +1,9 @@
 import AoC
 import ArgumentParser
+import Common
 import Foundation
 
-let days: [Int: DayRunner] = [
+let days: [Int: Day] = [
   1: Day01()
 ]
 
@@ -12,9 +13,9 @@ struct Advent: ParsableCommand {
   var day: Int
 
   mutating func run() throws {
-    let runner: DayRunner = days[day]!
+    let runner: Day = days[day]!
     // let startTime = Date()
-    runner.run()
+    try runner.run(day: day)
     // let endTime = Date()
     // print("Time: \(endTime.timeIntervalSince(startTime))")
   }

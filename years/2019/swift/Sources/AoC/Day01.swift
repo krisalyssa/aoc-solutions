@@ -1,19 +1,8 @@
 import Common
 import Foundation
 
-public struct Day01: DayRunner {
-  public init() {
-  }
-
-  public func run() {
-    let scriptURL = URL.init(fileURLWithPath: #file)
-    let dataURL = URL.init(fileURLWithPath: "../../../data/01.txt", relativeTo: scriptURL)
-      .standardizedFileURL
-    let input = Input(fromURL: dataURL)
-
-    part1(input)
-    part2(input)
-  }
+public class Day01: Day {
+  public init() {}
 
   public func part1(_ input: Input) {
     let data = input.asIntArray()
