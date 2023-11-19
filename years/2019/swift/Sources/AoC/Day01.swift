@@ -1,3 +1,4 @@
+import Common
 import Foundation
 
 public struct Day01: DayRunner {
@@ -8,7 +9,7 @@ public struct Day01: DayRunner {
     let scriptURL = URL.init(fileURLWithPath: #file)
     let dataURL = URL.init(fileURLWithPath: "../../../data/01.txt", relativeTo: scriptURL)
       .standardizedFileURL
-    let input = Input.init(fromURL: dataURL)
+    let input = Input(fromURL: dataURL)
 
     part1(input)
     part2(input)
