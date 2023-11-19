@@ -6,22 +6,14 @@ public class Day01: Day {
 
   public func part1(_ input: Input) {
     let data = input.asIntArray()
-    let total = data.map { Day01.calculateFuel(mass: $0) }.reduce(
-      0,
-      { x, y in
-        x + y
-      })
+    let total = data.map { Day01.calculateFuel(mass: $0) }.reduce(0, +)
 
     print("day 01 part 1: \(total)")
   }
 
   public func part2(_ input: Input) {
     let data = input.asIntArray()
-    let total = data.map { Day01.calculateAllFuel(mass: $0) }.reduce(
-      0,
-      { x, y in
-        x + y
-      })
+    let total = data.map { Day01.calculateAllFuel(mass: $0) }.reduce(0, +)
 
     print("day 01 part 2: \(total)")
   }
