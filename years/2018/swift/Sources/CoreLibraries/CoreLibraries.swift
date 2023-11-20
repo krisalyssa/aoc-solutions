@@ -8,6 +8,6 @@
  **
  **/
 
-// @_exported import Algorithms
+@_exported import Algorithms
 // @_exported import Collections
 @_exported import Foundation
