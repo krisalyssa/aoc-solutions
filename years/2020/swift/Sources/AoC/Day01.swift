@@ -17,13 +17,23 @@ public class Day01: Day {
 
   public func part1(_ input: Input) {
     let data = input.asIntArray()
-
-    print("day 01 part 1: \(total)")
+    let result = Day01.findMatchingEntries(list: data, by: 2)
+    print("day 01 part 1: \(result)")
   }
 
   public func part2(_ input: Input) {
     let data = input.asIntArray()
+    let result = Day01.findMatchingEntries(list: data, by: 3)
+    print("day 01 part 1: \(result)")
+  }
 
-    print("day 01 part 2: \(total)")
+  static func findMatchingEntries(list: [Int], by: Int) -> Int {
+    for group in list.combinations(ofCount: by) {
+      if group.reduce(0, +) == 2020 {
+        return group.reduce(1, *)
+      }
+    }
+
+    return 0
   }
 }

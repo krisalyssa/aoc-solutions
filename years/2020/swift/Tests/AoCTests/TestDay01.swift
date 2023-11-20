@@ -13,7 +13,8 @@ import XCTest
 @testable import AoC
 
 class TestDay01: XCTestCase {
-  func testSomeFunc() async throws {
-    XCTAssertEqual(1, 1)
+  func testFindMatchingEntriesBy2() async throws {
+    let data = [1721, 979, 366, 299, 675, 1456]
+    XCTAssertEqual(Day01.findMatchingEntries(list: data, by: 2), 514579)
   }
 }
