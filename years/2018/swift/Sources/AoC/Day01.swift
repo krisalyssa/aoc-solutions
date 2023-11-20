@@ -8,6 +8,7 @@
  **
  **/
 
+import Algorithms
 import Common
 import Foundation
 
@@ -23,7 +24,22 @@ public class Day01: Day {
   public func part2(_ input: Input) {
     let data = input.asIntArray()
 
-    print("day 01 part 2: \(data)")
+    print("day 01 part 2: \(Day01.findStart(list: data))")
+  }
+
+  static func findStart(list: [Int]) -> Int {
+    var seen = Set<Int>([0])
+    var value = 0
+
+    for delta in list.cycled() {
+      value += delta
+      if seen.contains(value) {
+        return value
+      }
+      seen.insert(value)
+    }
+
+    return 0
   }
 
   static func sumDeltas(list: [Int]) -> Int {
