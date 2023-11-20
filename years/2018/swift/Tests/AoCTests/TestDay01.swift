@@ -13,7 +13,10 @@ import XCTest
 @testable import AoC
 
 class TestDay01: XCTestCase {
-  func testSomeFunc() async throws {
-    XCTAssertEqual(1, 1)
+  func testSumDeltas() async throws {
+    XCTAssertEqual(Day01.sumDeltas(list: [1, -2, 3, 1]), 3)
+    XCTAssertEqual(Day01.sumDeltas(list: [1, 1, 1]), 3)
+    XCTAssertEqual(Day01.sumDeltas(list: [1, 1, -2]), 0)
+    XCTAssertEqual(Day01.sumDeltas(list: [-1, -2, -3]), -6)
   }
 }
