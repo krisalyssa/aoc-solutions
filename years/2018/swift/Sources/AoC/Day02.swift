@@ -29,7 +29,17 @@ public class Day02: Day {
   public func part2(_ input: Input) {
     let data = input.asStringArray()
 
-    print("day 02 part 2: \(data)")
+    print("day 02 part 2: \(Day02.boxesWithPrototypeFabric(boxIDs: data))")
+  }
+
+  static func boxesWithPrototypeFabric(boxIDs: [String]) -> String {
+    for pair in boxIDs.combinations(ofCount: 2) {
+      if hamming(lhs: pair[0], rhs: pair[1]) == 1 {
+        return zip(pair[0], pair[1]).filter { $0 == $1 }.map { String($0.0) }.joined()
+      }
+    }
+
+    return ""
   }
 
   static func characterCounts(_ boxID: String) -> [Character: Int] {
@@ -41,6 +51,10 @@ public class Day02: Day {
     let twos = candidates.filter { c in c.is2 }.count
     let threes = candidates.filter { c in c.is3 }.count
     return twos * threes
+  }
+
+  static func hamming(lhs: String, rhs: String) -> Int {
+    return zip(lhs, rhs).filter { $0 != $1 }.count
   }
 
   static func likelyCandidate(_ boxID: String) -> Candidate {

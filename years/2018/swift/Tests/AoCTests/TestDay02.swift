@@ -13,6 +13,19 @@ import XCTest
 @testable import AoC
 
 class TestDay02: XCTestCase {
+  func testBoxesWithPrototypeFabric() throws {
+    XCTAssertEqual(
+      Day02.boxesWithPrototypeFabric(boxIDs: [
+        "abcde",
+        "fghij",
+        "klmno",
+        "pqrst",
+        "fguij",
+        "axcye",
+        "wvxyz",
+      ]), "fgij")
+  }
+
   func testCharacterCounts() throws {
     XCTAssertEqual(
       Day02.characterCounts("abcdef"), ["a": 1, "b": 1, "c": 1, "d": 1, "e": 1, "f": 1])
@@ -33,6 +46,11 @@ class TestDay02: XCTestCase {
   func testChecksum() throws {
     let ids = ["abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab"]
     XCTAssertEqual(Day02.checksum(ids), 12)
+  }
+
+  func testHamming() throws {
+    XCTAssertEqual(Day02.hamming(lhs: "abcde", rhs: "axcye"), 2)
+    XCTAssertEqual(Day02.hamming(lhs: "fghij", rhs: "fguij"), 1)
   }
 
   func testLikelyCandidate() throws {
