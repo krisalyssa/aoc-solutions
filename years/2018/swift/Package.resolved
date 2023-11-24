@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/CraigCottingham/swift-aoc-common.git",
       "state" : {
-        "revision" : "d9f4752067ee32cdd53961494265929ae0e922c6",
-        "version" : "0.6.0"
+        "revision" : "b3f66b4b13e74c583e84d456d953e89ccafc21dd",
+        "version" : "0.7.0"
       }
     },
     {
