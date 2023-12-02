@@ -15,6 +15,8 @@ import PackageDescription
 let package = Package(
   name: "Advent of Code",
 
+  platforms: [.macOS(.v13)],
+
   products: [
     .executable(name: "advent", targets: ["advent"]),
     .library(name: "AoC", targets: ["AoC"]),
