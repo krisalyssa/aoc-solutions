@@ -8,6 +8,7 @@
  **
  **/
 
+import Geometry
 import XCTest
 
 @testable import AoC
