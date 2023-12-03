@@ -9,6 +9,7 @@
  **/
 
 import Common
+import Extensions
 import Foundation
 
 public class Day01: Day {
@@ -35,8 +36,7 @@ public class Day01: Day {
     matchingFirst regexFirst: Regex<(Substring, Substring)>,
     andLast regexLast: Regex<(Substring, Substring)>
   ) -> Int {
-    lines.map { calibrationValue(in: $0, matchingFirst: regexFirst, andLast: regexLast) }.reduce(
-      0, +)
+    lines.map { calibrationValue(in: $0, matchingFirst: regexFirst, andLast: regexLast) }.sum()
   }
 
   static func calibrationValue(
