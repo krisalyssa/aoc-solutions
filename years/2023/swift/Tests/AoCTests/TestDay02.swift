@@ -85,4 +85,16 @@ class TestDay02: XCTestCase {
 
     XCTAssertEqual(possibleGames.map { $0.id }, [1, 2, 5])
   }
+
+  func testPower() throws {
+    XCTAssertEqual(Day02.power(Day02.Game(id: 1, cubes: ["red": 4, "green": 2, "blue": 6])), 48)
+    XCTAssertEqual(Day02.power(Day02.Game(id: 2, cubes: ["red": 1, "green": 3, "blue": 4])), 12)
+    XCTAssertEqual(
+      Day02.power(Day02.Game(id: 3, cubes: ["red": 20, "green": 13, "blue": 6])), 1560)
+    XCTAssertEqual(Day02.power(Day02.Game(id: 4, cubes: ["red": 14, "green": 3, "blue": 15])), 630)
+    XCTAssertEqual(Day02.power(Day02.Game(id: 5, cubes: ["red": 6, "green": 3, "blue": 2])), 36)
+
+    let games = data.map { Day02.parseLine($0)! }
+    XCTAssertEqual(games.map({ Day02.power($0) }).sum(), 2286)
+  }
 }

@@ -34,11 +34,13 @@ public class Day02: Day {
   public func part2(_ input: Input) {
     let data = input.asStringArray()
 
-    print("day 02 part 2: \(data.count)")
+    let games = data.map { Day02.parseLine($0)! }
+
+    print("day 02 part 2: \(games.map({ Day02.power($0) }).sum())")
   }
 
   static func isGamePossible(game: Game, bag: [String: Int]) -> Bool {
-    return bag.allSatisfy({ (color, count) in return count >= game.cubes[color, default: 0] })
+    bag.allSatisfy({ (color, count) in return count >= game.cubes[color, default: 0] })
   }
 
   // "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
@@ -65,6 +67,10 @@ public class Day02: Day {
   }
 
   static func possibleGames(allGames: [Game], bag: [String: Int]) -> [Game] {
-    return allGames.filter { isGamePossible(game: $0, bag: bag) }
+    allGames.filter { isGamePossible(game: $0, bag: bag) }
+  }
+
+  static func power(_ game: Game) -> Int {
+    game.cubes["red"]! * game.cubes["green"]! * game.cubes["blue"]!
   }
 }
