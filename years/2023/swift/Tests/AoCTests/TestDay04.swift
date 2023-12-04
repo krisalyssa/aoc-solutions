@@ -8,6 +8,7 @@
  **
  **/
 
+import Collections
 import XCTest
 
 @testable import AoC
@@ -22,8 +23,30 @@ class TestDay04: XCTestCase {
     "Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11",
   ]
 
+  func describeCountingSet(_ s: CountingSet<Int>) -> String {
+    var buffer: [String] = []
+    for i in s.keys.sorted(by: { $0 < $1 }) {
+      buffer.append("\(i): \(s[i]!)")
+    }
+    return "[\(buffer.joined(separator: ", "))]"
+  }
+
   func testPart1() throws {
     XCTAssertEqual(data.map({ Day04.parseLine($0)! }).map({ Day04.value($0) }).sum(), 13)
+  }
+
+  func testPart2() throws {
+    var cards: [Int: Day04.Card] = [:]
+    cards.merge(data.map({ Day04.parseLine($0)! }).map({ ($0.id, $0) })) { (current, _) in current }
+
+    var pile: CountingSet<Int> = [:]
+    for id in cards.keys { pile[id] = 1 }
+
+    for id in cards.keys.sorted() {
+      Day04.redeem(card: cards[id]!, pile: &pile)
+    }
+
+    XCTAssertEqual(pile.values.sum(), 30)
   }
 
   func testParseLine() throws {
@@ -57,6 +80,32 @@ class TestDay04: XCTestCase {
       Day04.Card(
         id: 6, winningNumbers: [31, 18, 13, 56, 72],
         numbersWeHave: [74, 77, 10, 23, 35, 67, 36, 11]))
+  }
+
+  func testRedeem() throws {
+    var cards: [Int: Day04.Card] = [:]
+    cards.merge(data.map({ Day04.parseLine($0)! }).map({ ($0.id, $0) })) { (current, _) in current }
+
+    var pile: CountingSet<Int> = [:]
+    for id in cards.keys { pile[id] = 1 }
+
+    Day04.redeem(card: cards[1]!, pile: &pile)
+    XCTAssertEqual(pile, [1: 1, 2: 2, 3: 2, 4: 2, 5: 2, 6: 1])
+
+    Day04.redeem(card: cards[2]!, pile: &pile)
+    XCTAssertEqual(pile, [1: 1, 2: 2, 3: 4, 4: 4, 5: 2, 6: 1])
+
+    Day04.redeem(card: cards[3]!, pile: &pile)
+    XCTAssertEqual(pile, [1: 1, 2: 2, 3: 4, 4: 8, 5: 6, 6: 1])
+
+    Day04.redeem(card: cards[4]!, pile: &pile)
+    XCTAssertEqual(pile, [1: 1, 2: 2, 3: 4, 4: 8, 5: 14, 6: 1])
+
+    Day04.redeem(card: cards[5]!, pile: &pile)
+    XCTAssertEqual(pile, [1: 1, 2: 2, 3: 4, 4: 8, 5: 14, 6: 1])
+
+    Day04.redeem(card: cards[6]!, pile: &pile)
+    XCTAssertEqual(pile, [1: 1, 2: 2, 3: 4, 4: 8, 5: 14, 6: 1])
   }
 
   func testValue() throws {

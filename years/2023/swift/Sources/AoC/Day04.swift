@@ -8,6 +8,7 @@
  **
  **/
 
+import Collections
 import Common
 import Extensions
 import Foundation
@@ -29,8 +30,17 @@ public class Day04: Day {
 
   public func part2(_ input: Input) {
     let data = input.asStringArray()
+    var cards: [Int: Day04.Card] = [:]
+    cards.merge(data.map({ Day04.parseLine($0)! }).map({ ($0.id, $0) })) { (current, _) in current }
 
-    print("day 04 part 2: \(data.count)")
+    var pile: CountingSet<Int> = [:]
+    for id in cards.keys { pile[id] = 1 }
+
+    for id in cards.keys.sorted() {
+      Day04.redeem(card: cards[id]!, pile: &pile)
+    }
+
+    print("day 04 part 2: \(pile.values.sum())")
   }
 
   // Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
@@ -47,6 +57,15 @@ public class Day04: Day {
       return Card(id: id, winningNumbers: winningNumbers, numbersWeHave: numbersWeHave)
     } else {
       return nil
+    }
+  }
+
+  static func redeem(card: Card, pile: inout CountingSet<Int>) {
+    let winningNumbers = Day04.winningNumbersWeHave(card)
+    if winningNumbers.count > 0 {
+      for i in 1...winningNumbers.count {
+        pile[card.id + i, default: 1] += (pile[card.id] ?? 0)
+      }
     }
   }
 
