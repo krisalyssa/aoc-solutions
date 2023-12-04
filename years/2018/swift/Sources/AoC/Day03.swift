@@ -12,11 +12,7 @@ import Algorithms
 import Collections
 import Common
 import Foundation
-
-struct Point2D: Hashable {
-  let x: Int
-  let y: Int
-}
+import Geometry
 
 struct Claim: Equatable {
   let number: Int
