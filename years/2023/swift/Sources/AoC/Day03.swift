@@ -19,6 +19,7 @@ public class Day03: Day {
     let number: String
     let lineno: Int
     let range: Range<String.Index>
+    let symbol: Symbol?
   }
 
   struct Symbol: Hashable {
@@ -26,17 +27,25 @@ public class Day03: Day {
     let lineno: Int
     let line: String
     let range: Range<String.Index>
+    var parts: Set<Candidate>
   }
 
   public func part1(_ input: Input) {
     let data = input.asStringArray()
 
-    let (candidates, symbols) = Day03.parseData(data: data)
-    var parts: Set<Candidate> = []
+    var (candidates, symbols) = Day03.parseData(data: data)
 
-    for symbol in symbols {
-      parts.formUnion(Day03.partsForSymbol(candidates: candidates, symbol: symbol))
-    }
+    symbols = Set(
+      symbols.map {
+        let p = Day03.partsForSymbol(candidates: candidates, symbol: $0)
+        return Symbol(s: $0.s, lineno: $0.lineno, line: $0.line, range: $0.range, parts: p)
+      })
+
+    let parts = symbols.reduce(
+      Set<Candidate>(),
+      { acc, element in
+        return acc.union(element.parts)
+      })
 
     print("day 03 part 1: \(Day03.score(parts))")
   }
@@ -44,7 +53,22 @@ public class Day03: Day {
   public func part2(_ input: Input) {
     let data = input.asStringArray()
 
-    print("day 03 part 2: \(data.count)")
+    var (candidates, symbols) = Day03.parseData(data: data)
+
+    symbols = Set(
+      symbols.map {
+        let p = Day03.partsForSymbol(candidates: candidates, symbol: $0)
+        return Symbol(s: $0.s, lineno: $0.lineno, line: $0.line, range: $0.range, parts: p)
+      })
+
+    let gears = symbols.filter { $0.s == "*" && $0.parts.count == 2 }
+    let sum = gears.map({ Day03.gearRatio(gear: $0) }).sum()
+
+    print("day 03 part 2: \(sum)")
+  }
+
+  static func gearRatio(gear: Symbol) -> Int {
+    gear.parts.map({ Int($0.number)! }).reduce(1, *)
   }
 
   static func parseData(data: [String]) -> (Set<Candidate>, Set<Symbol>) {
@@ -53,11 +77,13 @@ public class Day03: Day {
 
     for (ln, line) in data.enumerated() {
       for rc in line.ranges(of: #/\d+/#) {
-        candidates.insert(Day03.Candidate(number: String(line[rc]), lineno: ln, range: rc))
+        candidates.insert(
+          Day03.Candidate(number: String(line[rc]), lineno: ln, range: rc, symbol: nil)
+        )
       }
 
       for rs in line.ranges(of: #/[^\d.]/#) {
-        symbols.insert(Symbol(s: String(line[rs]), lineno: ln, line: line, range: rs))
+        symbols.insert(Symbol(s: String(line[rs]), lineno: ln, line: line, range: rs, parts: []))
       }
     }
 
@@ -73,7 +99,7 @@ public class Day03: Day {
       candidates.filter({
         $0.range.contains(symbol.line.index(before: symbol.range.lowerBound))
           && vr.contains($0.lineno)
-      })
+      }).map { Candidate(number: $0.number, lineno: $0.lineno, range: $0.range, symbol: symbol) }
     )
 
     // middle
@@ -81,7 +107,7 @@ public class Day03: Day {
       candidates.filter({
         $0.range.overlaps(symbol.range)
           && vr.contains($0.lineno)
-      })
+      }).map { Candidate(number: $0.number, lineno: $0.lineno, range: $0.range, symbol: symbol) }
     )
 
     // right
@@ -89,7 +115,7 @@ public class Day03: Day {
       candidates.filter({
         $0.range.contains(symbol.line.index(after: symbol.range.lowerBound))
           && vr.contains($0.lineno)
-      })
+      }).map { Candidate(number: $0.number, lineno: $0.lineno, range: $0.range, symbol: symbol) }
     )
 
     return parts
