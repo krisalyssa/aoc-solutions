@@ -63,7 +63,7 @@ class TestDay05: XCTestCase {
     XCTAssertEqual(
       Day05.parseAlmanac(data),
       Almanac(
-        seeds: [14, 55, 13, 79],
+        seeds: [79, 14, 55, 13],
         seedToSoil: [98..<100: 50..<52, 50..<98: 52..<100],
         soilToFertilizer: [15..<52: 0..<37, 52..<54: 37..<39, 0..<15: 39..<54],
         fertilizerToWater: [7..<11: 57..<61, 11..<53: 0..<42, 53..<61: 49..<57, 0..<7: 42..<49],

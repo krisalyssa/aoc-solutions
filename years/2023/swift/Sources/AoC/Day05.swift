@@ -16,7 +16,7 @@ import Foundation
 typealias Map = [Range<Int>: Range<Int>]
 
 public struct Almanac: Equatable {
-  let seeds: Set<Int>
+  let seeds: [Int]
   let seedToSoil: Map
   let soilToFertilizer: Map
   let fertilizerToWater: Map
@@ -77,7 +77,7 @@ public class Day05: Day {
     let humidityToLocation = parseMap(data: &data, name: "humidity-to-location")
 
     return Almanac(
-      seeds: Set(seeds),
+      seeds: seeds,
       seedToSoil: seedToSoil,
       soilToFertilizer: soilToFertilizer,
       fertilizerToWater: fertilizerToWater,
