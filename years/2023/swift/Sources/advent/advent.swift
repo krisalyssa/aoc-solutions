@@ -11,7 +11,7 @@
 import AoC
 import AoCCommon
 import ArgumentParser
-import Foundation
+import CoreLibraries
 
 let days: [Int: Day] = [
   1: Day01(),

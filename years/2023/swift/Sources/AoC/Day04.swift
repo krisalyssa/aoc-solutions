@@ -11,7 +11,7 @@
 import AoCCollections
 import AoCCommon
 import AoCExtensions
-import Foundation
+import CoreLibraries
 
 public class Day04: Day {
   public init() {}

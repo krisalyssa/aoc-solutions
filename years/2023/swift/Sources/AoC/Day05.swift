@@ -10,8 +10,7 @@
 
 import AoCCommon
 import AoCExtensions
-import Collections
-import Foundation
+import CoreLibraries
 
 typealias Map = [Range<Int>: Range<Int>]
 
@@ -30,7 +29,7 @@ public class Day05: Day {
   public init() {}
 
   public func part1(_ input: Input) {
-    let data = input.asStringArray()
+    let data = input.asStringArray(withBlankLines: true)
 
     let almanac = Day05.parseAlmanac(data)
     let minLocation = almanac.seeds.map({ Day05.seedLocation(seed: $0, almanac: almanac) }).min()!
@@ -39,7 +38,7 @@ public class Day05: Day {
   }
 
   public func part2(_ input: Input) {
-    let data = input.asStringArray()
+    let data = input.asStringArray(withBlankLines: true)
 
     print("day 05 part 2: \(data.count)")
   }

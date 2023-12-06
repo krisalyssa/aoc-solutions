@@ -8,7 +8,7 @@
  **
  **/
 
-import Collections
+import CoreLibraries
 import XCTest
 
 @testable import AoC
