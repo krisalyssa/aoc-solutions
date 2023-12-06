@@ -13,7 +13,7 @@ import AoCExtensions
 import Collections
 import Foundation
 
-typealias Map = [Range<Int>: Int]
+typealias Map = [Range<Int>: Range<Int>]
 
 public struct Almanac: Equatable {
   let seeds: Set<Int>
@@ -50,7 +50,7 @@ public class Day05: Day {
       return seed
     } else {
       let (range, offset) = mapping.first!
-      return (seed - range.lowerBound + offset)
+      return (seed - range.lowerBound + offset.lowerBound)
     }
   }
 
@@ -113,14 +113,16 @@ public class Day05: Day {
 
     if fields.contains(nil) {
       print("error parsing line: \(line)")
-      return [0..<1: 0]
+      return [0..<1: 0..<1]
     }
 
     let destinationStart = fields[0]!
     let sourceStart = fields[1]!
     let sourceLength = fields[2]!
 
-    return [sourceStart..<sourceStart + sourceLength: destinationStart]
+    return [
+      sourceStart..<sourceStart + sourceLength: destinationStart..<destinationStart + sourceLength
+    ]
   }
 
   static func seedLocation(seed: Int, almanac: Almanac) -> Int {
