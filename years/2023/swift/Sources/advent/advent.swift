@@ -9,8 +9,8 @@
  **/
 
 import AoC
+import AoCCommon
 import ArgumentParser
-import Common
 import Foundation
 
 let days: [Int: Day] = [
