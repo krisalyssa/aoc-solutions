@@ -41,7 +41,7 @@ let package = Package(
     .target(
       name: "AoC",
       dependencies: [
-        .product(name: "Common", package: "swift-aoc-common"),
+        .product(name: "AoCCommon", package: "swift-aoc-common"),
         "CoreLibraries",
       ]),
 

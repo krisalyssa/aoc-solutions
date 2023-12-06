@@ -8,9 +8,9 @@
  **
  **/
 
-import Collections
-import Common
-import Extensions
+import AoCCollections
+import AoCCommon
+import AoCExtensions
 import Foundation
 
 public class Day04: Day {

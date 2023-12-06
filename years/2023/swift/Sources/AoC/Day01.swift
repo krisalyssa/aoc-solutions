@@ -8,8 +8,8 @@
  **
  **/
 
-import Common
-import Extensions
+import AoCCommon
+import AoCExtensions
 import Foundation
 
 public class Day01: Day {
