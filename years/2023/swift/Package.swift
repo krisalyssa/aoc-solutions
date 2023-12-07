@@ -25,9 +25,9 @@ let package = Package(
   dependencies: [
     // .package(url: "https://github.com/CraigCottingham/swift-aoc-common.git", from: "0.7.0"),
     .package(path: "../../../../swift-aoc-common"),
-    // .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.0.0"),
+    .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.0.0"),
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.0"),
-    // .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.2"),
+    .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.2"),
   ],
 
   targets: [
@@ -48,8 +48,8 @@ let package = Package(
     .target(
       name: "CoreLibraries",
       dependencies: [
-        // .product(name: "Algorithms", package: "swift-algorithms"),
-        // .product(name: "Collections", package: "swift-collections"),
+        .product(name: "Algorithms", package: "swift-algorithms"),
+        .product(name: "Collections", package: "swift-collections"),
       ]),
 
     .testTarget(name: "AoCTests", dependencies: ["AoC"]),

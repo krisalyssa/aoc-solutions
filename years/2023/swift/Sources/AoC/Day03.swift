@@ -10,7 +10,7 @@
 
 import AoCCommon
 import AoCExtensions
-import Foundation
+import CoreLibraries
 
 public class Day03: Day {
   public init() {}
