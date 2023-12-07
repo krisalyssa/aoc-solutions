@@ -40,7 +40,21 @@ public class Day05: Day {
   public func part2(_ input: Input) {
     let data = input.asStringArray(withBlankLines: true)
 
-    print("day 05 part 2: \(data.count)")
+    // I don't like brute-forcing this.
+    // I have a better algorithm in mind, but I haven't figured out how to implement it yet.
+    // Basically, instead of passing seeds through one at a time, pass whole ranges,
+    // splitting and mapping them as needed, then return the lowest lowerBound.
+
+    let almanac = Day05.parseAlmanac(data)
+    let seeds = Array(almanac.seeds)
+    let locations = seeds.chunks(ofCount: 2).map({ pair in
+      let lowerBound = pair[pair.startIndex]
+      let upperBound = lowerBound + pair[pair.endIndex - 1]
+      let range = lowerBound..<upperBound
+      return range.map({ Day05.seedLocation(seed: $0, almanac: almanac) }).min()!
+    })
+
+    print("day 05 part 2: \(locations.min()!)")
   }
 
   static func mapSeed(seed: Int, map: Map) -> Int {

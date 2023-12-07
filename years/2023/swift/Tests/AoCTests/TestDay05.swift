@@ -50,6 +50,19 @@ class TestDay05: XCTestCase {
     "56 93 4",
   ]
 
+  func testPart2() throws {
+    let almanac = Day05.parseAlmanac(data)
+    let seeds = Array(almanac.seeds)
+    let locations = seeds.chunks(ofCount: 2).map({ pair in
+      let lowerBound = pair[pair.startIndex]
+      let upperBound = lowerBound + pair[pair.endIndex - 1]
+      let range = lowerBound..<upperBound
+      return range.map({ Day05.seedLocation(seed: $0, almanac: almanac) }).min()!
+    })
+
+    XCTAssertEqual(locations.min()!, 46)
+  }
+
   func testMapSeed() throws {
     let map = [50..<98: 52..<100, 98..<100: 50..<52]
     XCTAssertEqual(Day05.mapSeed(seed: 79, map: map), 81)
