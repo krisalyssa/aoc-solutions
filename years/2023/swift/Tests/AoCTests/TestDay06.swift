@@ -20,13 +20,23 @@ class TestDay06: XCTestCase {
   ]
 
   func testPart1() throws {
-    let score = Day06.parseInput(data)
+    let score = Day06.parseInputPart1(data)
       .map({ (t, d) in Day06.winningStrategies(time: t, distance: d).count }).reduce(1, *)
     XCTAssertEqual(score, 288)
   }
 
-  func testParseInput() throws {
-    XCTAssertEqual(Day06.parseInput(data), [7: 9, 15: 40, 30: 200])
+  func testPart2() throws {
+    let score = Day06.parseInputPart2(data)
+      .map({ (t, d) in Day06.winningStrategies(time: t, distance: d).count }).reduce(1, *)
+    XCTAssertEqual(score, 71503)
+  }
+
+  func testParseInputPart1() throws {
+    XCTAssertEqual(Day06.parseInputPart1(data), [7: 9, 15: 40, 30: 200])
+  }
+
+  func testParseInputPart2() throws {
+    XCTAssertEqual(Day06.parseInputPart2(data), [71_530: 940_200])
   }
 
   func testRunRace() throws {

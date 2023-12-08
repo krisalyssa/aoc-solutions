@@ -18,7 +18,7 @@ public class Day06: Day {
   public func part1(_ input: Input) {
     let data = input.asStringArray()
 
-    let score = Day06.parseInput(data)
+    let score = Day06.parseInputPart1(data)
       .map({ (t, d) in Day06.winningStrategies(time: t, distance: d).count }).reduce(1, *)
 
     print("day 06 part 1: \(score)")
@@ -27,10 +27,13 @@ public class Day06: Day {
   public func part2(_ input: Input) {
     let data = input.asStringArray()
 
-    print("day 06 part 2: \(data.count)")
+    let score = Day06.parseInputPart2(data)
+      .map({ (t, d) in Day06.winningStrategies(time: t, distance: d).count }).reduce(1, *)
+
+    print("day 06 part 2: \(score)")
   }
 
-  static func parseInput(_ data: [String]) -> [Int: Int] {
+  static func parseInputPart1(_ data: [String]) -> [Int: Int] {
     let times = data[0].replacing(#/^Time:\s+/#, with: "").split(separator: #/\s+/#).map {
       Int($0)!
     }
@@ -39,6 +42,13 @@ public class Day06: Day {
     }
 
     return [Int: Int](zip(times, distances), uniquingKeysWith: { (first, _) in first })
+  }
+
+  static func parseInputPart2(_ data: [String]) -> [Int: Int] {
+    let time = Int(data[0].replacing(#/^Time:\s+/#, with: "").replacing(#/\s+/#, with: ""))!
+    let distance = Int(data[1].replacing(#/^Distance:\s+/#, with: "").replacing(#/\s+/#, with: ""))!
+
+    return [time: distance]
   }
 
   static func runRace(_ raceLength: Int) -> [Int] {
