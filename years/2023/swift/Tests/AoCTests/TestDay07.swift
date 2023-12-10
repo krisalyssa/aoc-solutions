@@ -30,6 +30,14 @@ class TestDay07: XCTestCase {
     XCTAssertEqual(total, 6440)
   }
 
+  func testPart2() throws {
+    let total = data.map({ Day07.parseLinePart2($0)! }).sorted().enumerated().map({ (rank, hand) in
+      hand.winnings(forRank: rank + 1)!
+    }).sum()
+
+    XCTAssertEqual(total, 5905)
+  }
+
   func testHand_Comparable() throws {
     XCTAssertTrue(Day07.HandPart1(cards: "AAAAA") > Day07.HandPart1(cards: "AA8AA"))
     XCTAssertTrue(Day07.HandPart1(cards: "AA8AA") > Day07.HandPart1(cards: "23332"))
