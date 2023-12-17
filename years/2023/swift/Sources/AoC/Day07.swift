@@ -25,6 +25,7 @@ public class Day07: Day {
     case fourOfAKind
     case fiveOfAKind
   }
+
   public class Hand: Comparable {
     let cards: String
     var bid: Int? = nil
