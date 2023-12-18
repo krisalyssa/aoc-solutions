@@ -30,13 +30,27 @@ public class Day09: Day {
     }
 
     @discardableResult
-    public func extend() -> Self {
+    public func extendFuture() -> Self {
       self.sequences[self.sequences.count - 1].append(0)
       (0..<self.sequences.count - 1).reversed().forEach { i in
         let next = self.sequences[i].last! + self.sequences[i + 1].last!
         self.sequences[i].append(next)
       }
       return self
+    }
+
+    @discardableResult
+    public func extendPast() -> Self {
+      self.sequences[self.sequences.count - 1].insert(0, at: 0)
+      (0..<self.sequences.count - 1).reversed().forEach { i in
+        let next = self.sequences[i].first! - self.sequences[i + 1].first!
+        self.sequences[i].insert(next, at: 0)
+      }
+      return self
+    }
+
+    var firstValue: Int {
+      self.sequences.first!.first!
     }
 
     var lastValue: Int {
@@ -47,7 +61,7 @@ public class Day09: Day {
   public func part1(_ input: Input) {
     let data = input.asStringArray()
 
-    let sum = data.map({ Day09.parseHistory($0).extend().lastValue }).sum()
+    let sum = data.map({ Day09.parseHistory($0).extendFuture().lastValue }).sum()
 
     print("day 09 part 1: \(sum)")
   }
@@ -55,7 +69,9 @@ public class Day09: Day {
   public func part2(_ input: Input) {
     let data = input.asStringArray()
 
-    print("day 09 part 2: \(data.count)")
+    let sum = data.map({ Day09.parseHistory($0).extendPast().firstValue }).sum()
+
+    print("day 09 part 2: \(sum)")
   }
 
   static func parseHistory(_ line: String) -> History {

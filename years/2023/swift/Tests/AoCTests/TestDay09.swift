@@ -21,22 +21,42 @@ class TestDay09: XCTestCase {
   ]
 
   func testPart1() throws {
-    XCTAssertEqual(data.map({ Day09.parseHistory($0).extend().lastValue }).sum(), 114)
+    XCTAssertEqual(data.map({ Day09.parseHistory($0).extendFuture().lastValue }).sum(), 114)
   }
 
-  func testHistory_Extend() throws {
+  func testPart2() throws {
+    XCTAssertEqual(data.map({ Day09.parseHistory($0).extendPast().firstValue }).sum(), 2)
+  }
+
+  func testHistory_ExtendFuture() throws {
     let h = Day09.parseHistory("0 3 6 9 12 15")
-    h.extend()
+    h.extendFuture()
     XCTAssertEqual(h.sequences.count, 3)
     XCTAssertEqual(h.sequences[0], [0, 3, 6, 9, 12, 15, 18])
     XCTAssertEqual(h.sequences[1], [3, 3, 3, 3, 3, 3])
     XCTAssertEqual(h.sequences[2], [0, 0, 0, 0, 0])
   }
 
+  func testHistory_ExtendPast() throws {
+    let h = Day09.parseHistory("0 3 6 9 12 15")
+    h.extendPast()
+    XCTAssertEqual(h.sequences.count, 3)
+    XCTAssertEqual(h.sequences[0], [-3, 0, 3, 6, 9, 12, 15])
+    XCTAssertEqual(h.sequences[1], [3, 3, 3, 3, 3, 3])
+    XCTAssertEqual(h.sequences[2], [0, 0, 0, 0, 0])
+  }
+
+  func testHistory_FirstValue() throws {
+    let h = Day09.parseHistory("0 3 6 9 12 15")
+    XCTAssertEqual(h.firstValue, 0)
+    h.extendPast()
+    XCTAssertEqual(h.firstValue, -3)
+  }
+
   func testHistory_LastValue() throws {
     let h = Day09.parseHistory("0 3 6 9 12 15")
     XCTAssertEqual(h.lastValue, 15)
-    h.extend()
+    h.extendFuture()
     XCTAssertEqual(h.lastValue, 18)
   }
 
