@@ -9,7 +9,7 @@
  **/
 
 import Algorithms
-import Collections
+import AoCCollections
 import AoCCommon
 import Foundation
 
