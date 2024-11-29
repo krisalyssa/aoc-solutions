@@ -36,7 +36,7 @@ defmodule AoC.MixProject do
       {:espec, "~> 1.9", only: [:test]},
       {:exprintf, "~> 0.2.1"},
       {:libgraph, "~> 0.16.0"},
-      {:math, git: "https://github.com/CraigCottingham/math.git"},
+      {:math, git: "https://github.com/krisalyssa/math.git"},
       {:max, "~> 0.1.3"},
       {:mix_test_watch, "~> 1.1", only: :dev, runtime: false}
     ]

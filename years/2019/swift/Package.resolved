@@ -3,7 +3,7 @@
     {
       "identity" : "swift-aoc-common",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CraigCottingham/swift-aoc-common.git",
+      "location" : "https://github.com/krisalyssa/swift-aoc-common.git",
       "state" : {
         "revision" : "2d01954af9bd7ef57a3a7a07450689d181299523",
         "version" : "0.4.0"

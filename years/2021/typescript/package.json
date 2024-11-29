@@ -7,14 +7,14 @@
 		"advent-of-code-2021",
 		"typescript"
 	],
-	"homepage": "https://github.com/CraigCottingham/advent-of-code",
+	"homepage": "https://github.com/krisalyssa/advent-of-code",
 	"bugs": {
-		"url": "https://github.com/CraigCottingham/advent-of-code/issues"
+		"url": "https://github.com/krisalyssa/advent-of-code/issues"
 	},
 	"license": "MIT",
 	"contributors": [
 		{
-			"author": "Craig Cottingham <craig@cottingham.net> (https://craigcottingham.github.com/)"
+			"author": "Kris Cottingham <krisalyssa@cottingham.net> (https://krisalyssa.github.com/)"
 		},
 		{
 			"author": "Trevor Gau <t-hugs@github.com> (https://github.com/T-Hugs)"
@@ -25,7 +25,7 @@
 	"man": [],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/CraigCottingham/advent-of-code.git"
+		"url": "https://github.com/krisalyssa/advent-of-code.git"
 	},
 	"scripts": {
 		"help": "ts-node init.ts -h",
