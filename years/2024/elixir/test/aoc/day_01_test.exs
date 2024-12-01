@@ -24,7 +24,15 @@ defmodule AoC.Day01.Test do
 
   describe "part 2" do
     test "with sample data" do
-      assert AoC.Day01.part_2("../data/01.txt") == 1000
+      with temp_dir <- System.tmp_dir!(),
+           temp_file <- "#{temp_dir}/2024-01-sample.txt",
+           :ok <-
+             File.write!(
+               "#{temp_dir}/2024-01-sample.txt",
+               "3   4\n4   3\n2   5\n1   3\n3   9\n3   3"
+             ) do
+        assert AoC.Day01.part_2(temp_file) == 31
+      end
     end
   end
 
@@ -38,13 +46,6 @@ defmodule AoC.Day01.Test do
       assert is_list(distances)
       assert Enum.count(distances) == 6
       assert distances == [2, 1, 0, 1, 2, 5]
-    end
-  end
-
-  describe "total_distance/1" do
-    test "with sample data" do
-      list = [2, 1, 0, 1, 2, 5]
-      assert Day01.total_distance(list) == 11
     end
   end
 
@@ -70,6 +71,26 @@ defmodule AoC.Day01.Test do
       assert is_list(list2)
       assert Enum.count(list2) == 6
       assert list2 == [3, 9, 3, 5, 3, 4]
+    end
+  end
+
+  describe "similarity_scores/1" do
+    test "with sample data" do
+      list1 = [3, 3, 1, 2, 4, 3]
+      list2 = [3, 9, 3, 5, 3, 4]
+      scores = Day01.similarity_scores({list1, list2})
+
+      refute is_nil(scores)
+      assert is_list(scores)
+      assert Enum.count(scores) == 6
+      assert scores == [9, 9, 0, 0, 4, 9]
+    end
+  end
+
+  describe "total_distance/1" do
+    test "with sample data" do
+      list = [2, 1, 0, 1, 2, 5]
+      assert Day01.total_distance(list) == 11
     end
   end
 end

@@ -11,13 +11,15 @@ defmodule AoC.Day01 do
     |> File.stream!()
     |> parse_lines()
     |> distances()
-    |> total_distance()
+    |> Enum.sum()
   end
 
   def part_2(filename) do
     filename
     |> File.stream!()
-    |> Enum.count()
+    |> parse_lines()
+    |> similarity_scores()
+    |> Enum.sum()
   end
 
   @spec distances({[integer()], [integer()]}) :: [integer()]
@@ -38,6 +40,11 @@ defmodule AoC.Day01 do
         {[int1 | list1], [int2 | list2]}
       end
     end)
+  end
+
+  def similarity_scores({list1, list2}) do
+    frequencies = Enum.frequencies(list2)
+    Enum.map(list1, fn n -> n * Map.get(frequencies, n, 0) end)
   end
 
   def total_distance(list), do: Enum.sum(list)
