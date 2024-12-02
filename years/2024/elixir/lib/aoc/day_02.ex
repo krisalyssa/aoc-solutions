@@ -17,8 +17,17 @@ defmodule AoC.Day02 do
   def part_2(filename) do
     filename
     |> File.stream!()
+    |> parse_lines()
+    |> Enum.filter(&is_safe_after_dampening/1)
     |> Enum.count()
   end
+
+  @spec dampen([integer()]) :: [[integer()]]
+  def dampen(report),
+    do:
+      Enum.reduce(0..(Enum.count(report) - 1), [], fn n, acc ->
+        [List.delete_at(report, n) | acc]
+      end)
 
   @spec diffs([integer()]) :: [integer()]
   def diffs(report) do
@@ -30,6 +39,12 @@ defmodule AoC.Day02 do
   def is_safe(report) do
     diff_list = diffs(report)
     safe_trend?(diff_list) && safe_diffs?(diff_list)
+  end
+
+  def is_safe_after_dampening(report) do
+    report
+    |> dampen()
+    |> Enum.any?(&is_safe/1)
   end
 
   @spec parse_lines(Enumerable.t()) :: [[integer()]]
