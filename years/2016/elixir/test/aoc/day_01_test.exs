@@ -18,7 +18,7 @@ defmodule AoC.Day01.Test do
 
   describe "part 2" do
     test "with sample data" do
-      assert Day01.part_2(["../data/01.txt"]) == 1
+      assert Day01.part_2(["R8, R4, R4, R8"]) == 4
     end
   end
 
@@ -29,10 +29,16 @@ defmodule AoC.Day01.Test do
     end
   end
 
-  describe "move/3" do
+  describe "expand/2" do
     test "with sample data" do
-      assert Day01.move({0, 0}, :east, "2") == {2, 0}
-      assert Day01.move({2, 0}, :north, "3") == {2, 3}
+      assert Day01.expand("L", "4") == ["L", ["S", "S", "S", "S"]]
+    end
+  end
+
+  describe "walk/3" do
+    test "with sample data" do
+      assert Day01.walk(:east, {0, 0}, "2") == {2, 0}
+      assert Day01.walk(:north, {2, 0}, "3") == {2, 3}
     end
   end
 end
