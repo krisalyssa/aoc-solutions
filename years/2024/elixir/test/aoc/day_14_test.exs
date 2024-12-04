@@ -8,13 +8,13 @@ defmodule AoC.Day14.Test do
 
   describe "part 1" do
     test "with sample data" do
-      assert AoC.Day14.part_1("../data/14.txt") == 0
+      assert AoC.Day14.part_1(["../data/14.txt"]) == 1
     end
   end
 
   describe "part 2" do
     test "with sample data" do
-      assert AoC.Day14.part_2("../data/14.txt") == 0
+      assert AoC.Day14.part_2(["../data/14.txt"]) == 1
     end
   end
 end
