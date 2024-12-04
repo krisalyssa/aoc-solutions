@@ -29,7 +29,7 @@ defmodule AoC.Day04.Test do
 
   describe "part 2" do
     test "with sample data" do
-      assert Day04.part_2(["../data/04.txt"]) == 1
+      assert Day04.part_2(@sample_data) == 9
     end
   end
 
@@ -88,6 +88,32 @@ defmodule AoC.Day04.Test do
     end
   end
 
+  describe "scan_bltr/1" do
+    test "with sample data" do
+      assert Day04.scan_bltr(Day04.load_grid(@sample_data)) == 4
+    end
+  end
+
+  describe "scan_brtl/1" do
+    test "with sample data" do
+      assert Day04.scan_brtl(Day04.load_grid(@sample_data)) == 4
+    end
+  end
+
+  describe "scan_bt/1" do
+    test "with sample data" do
+      grid = Day04.load_grid(@sample_data)
+      assert Day04.scan_bt(grid) == 2
+    end
+  end
+
+  describe "scan_line/1" do
+    test "with sample data" do
+      assert Day04.scan_line("MMMSXXMASM") == 1
+      assert Day04.scan_line("MSAMXMSMSA") == 0
+    end
+  end
+
   describe "scan_lr/1" do
     test "with sample data" do
       grid = Day04.load_grid(@sample_data)
@@ -102,22 +128,10 @@ defmodule AoC.Day04.Test do
     end
   end
 
-  describe "scan_line/1" do
+  describe "scan_tb/1" do
     test "with sample data" do
-      assert Day04.scan_line("MMMSXXMASM") == 1
-      assert Day04.scan_line("MSAMXMSMSA") == 0
-    end
-  end
-
-  describe "scan_bltr/1" do
-    test "with sample data" do
-      assert Day04.scan_bltr(Day04.load_grid(@sample_data)) == 4
-    end
-  end
-
-  describe "scan_brtl/1" do
-    test "with sample data" do
-      assert Day04.scan_brtl(Day04.load_grid(@sample_data)) == 4
+      grid = Day04.load_grid(@sample_data)
+      assert Day04.scan_tb(grid) == 1
     end
   end
 
@@ -133,17 +147,9 @@ defmodule AoC.Day04.Test do
     end
   end
 
-  describe "scan_tb/1" do
+  describe "scan_xmas/1" do
     test "with sample data" do
-      grid = Day04.load_grid(@sample_data)
-      assert Day04.scan_tb(grid) == 1
-    end
-  end
-
-  describe "scan_bt/1" do
-    test "with sample data" do
-      grid = Day04.load_grid(@sample_data)
-      assert Day04.scan_bt(grid) == 2
+      assert Day04.scan_xmas(Day04.load_grid(@sample_data)) == 9
     end
   end
 end

@@ -43,7 +43,20 @@ defmodule AoC.Day04 do
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.count()
+    |> Enum.to_list()
+    |> load_grid()
+    |> scan_xmas()
+  end
+
+  @spec corners(Matrix.t(), {integer(), integer()}) :: charlist()
+  def corners(grid, {row, col}) do
+    [
+      Matrix.get_element(grid, {row - 1, col - 1}),
+      Matrix.get_element(grid, {row - 1, col + 1}),
+      Matrix.get_element(grid, {row + 1, col + 1}),
+      Matrix.get_element(grid, {row + 1, col - 1})
+    ]
+    |> Enum.map(&elem(&1, 1))
   end
 
   @spec get_bltr(Matrix.t(), {integer(), integer()}) :: String.t()
@@ -200,4 +213,28 @@ defmodule AoC.Day04 do
 
     Enum.reduce(list, 0, fn index, acc -> acc + scan_line(get_trbl(grid, index)) end)
   end
+
+  @spec scan_xmas(Matrix.t()) :: integer()
+  def scan_xmas(grid) do
+    {rows, cols} = Matrix.size(grid)
+
+    list = for r <- 1..(rows - 2), c <- 1..(cols - 2), into: [], do: {r, c}
+
+    list
+    |> Enum.map(fn index ->
+      {:ok, element} = Matrix.get_element(grid, index)
+      {index, element}
+    end)
+    |> Enum.filter(fn {_, element} -> element == ?A end)
+    |> Enum.map(&elem(&1, 0))
+    |> Enum.map(&corners(grid, &1))
+    |> Enum.count(&x?/1)
+  end
+
+  @spec x?(charlist()) :: boolean()
+  def x?(~c"MMSS"), do: true
+  def x?(~c"SMMS"), do: true
+  def x?(~c"SSMM"), do: true
+  def x?(~c"MSSM"), do: true
+  def x?(_), do: false
 end
