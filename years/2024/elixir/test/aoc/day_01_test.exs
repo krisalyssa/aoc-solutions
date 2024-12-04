@@ -10,29 +10,13 @@ defmodule AoC.Day01.Test do
 
   describe "part 1" do
     test "with sample data" do
-      with temp_dir <- System.tmp_dir!(),
-           temp_file <- "#{temp_dir}/2024-01-sample.txt",
-           :ok <-
-             File.write!(
-               "#{temp_dir}/2024-01-sample.txt",
-               "3   4\n4   3\n2   5\n1   3\n3   9\n3   3"
-             ) do
-        assert AoC.Day01.part_1(temp_file) == 11
-      end
+      assert AoC.Day01.part_1(["3   4", "4   3", "2   5", "1   3", "3   9", "3   3"]) == 11
     end
   end
 
   describe "part 2" do
     test "with sample data" do
-      with temp_dir <- System.tmp_dir!(),
-           temp_file <- "#{temp_dir}/2024-01-sample.txt",
-           :ok <-
-             File.write!(
-               "#{temp_dir}/2024-01-sample.txt",
-               "3   4\n4   3\n2   5\n1   3\n3   9\n3   3"
-             ) do
-        assert AoC.Day01.part_2(temp_file) == 31
-      end
+      assert AoC.Day01.part_2(["3   4", "4   3", "2   5", "1   3", "3   9", "3   3"]) == 31
     end
   end
 

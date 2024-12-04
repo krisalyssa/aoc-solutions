@@ -1,25 +1,38 @@
 defmodule AoC.Day02 do
   @moduledoc false
 
+  @spec run() :: :ok
   def run do
-    IO.puts("day 02 part 1: #{AoC.Day02.part_1("../data/02.txt")}")
-    IO.puts("day 02 part 2: #{AoC.Day02.part_2("../data/02.txt")}")
+    IO.puts("day 02 part 1: #{AoC.Day02.run_part_1("../data/02.txt")}")
+    IO.puts("day 02 part 2: #{AoC.Day02.run_part_2("../data/02.txt")}")
   end
 
-  def part_1(filename) do
+  @spec run_part_1(String.t()) :: integer()
+  def run_part_1(filename) do
     filename
     |> File.stream!()
-    |> parse_lines()
-    |> Enum.filter(&is_safe/1)
-    |> Enum.count()
+    |> part_1()
   end
 
-  def part_2(filename) do
+  @spec run_part_2(String.t()) :: integer()
+  def run_part_2(filename) do
     filename
     |> File.stream!()
+    |> part_2()
+  end
+
+  @spec part_1(Enumerable.t()) :: integer()
+  def part_1(data) do
+    data
     |> parse_lines()
-    |> Enum.filter(&is_safe_after_dampening/1)
-    |> Enum.count()
+    |> Enum.count(&safe?/1)
+  end
+
+  @spec part_2(Enumerable.t()) :: integer()
+  def part_2(data) do
+    data
+    |> parse_lines()
+    |> Enum.count(&safe_after_dampening?/1)
   end
 
   @spec dampen([integer()]) :: [[integer()]]
@@ -34,17 +47,6 @@ defmodule AoC.Day02 do
     report
     |> Enum.chunk_every(2, 1, :discard)
     |> Enum.map(fn [a, b] -> b - a end)
-  end
-
-  def is_safe(report) do
-    diff_list = diffs(report)
-    safe_trend?(diff_list) && safe_diffs?(diff_list)
-  end
-
-  def is_safe_after_dampening(report) do
-    report
-    |> dampen()
-    |> Enum.any?(&is_safe/1)
   end
 
   @spec parse_lines(Enumerable.t()) :: [[integer()]]
@@ -65,8 +67,23 @@ defmodule AoC.Day02 do
     end)
   end
 
+  @spec safe?([integer()]) :: boolean()
+  def safe?(report) do
+    diff_list = diffs(report)
+    safe_trend?(diff_list) && safe_diffs?(diff_list)
+  end
+
+  @spec safe_after_dampening?([integer()]) :: boolean()
+  def safe_after_dampening?(report) do
+    report
+    |> dampen()
+    |> Enum.any?(&safe?/1)
+  end
+
+  @spec safe_diffs?([integer()]) :: boolean()
   def safe_diffs?(diffs), do: Enum.all?(diffs, fn d -> abs(d) >= 1 && abs(d) <= 3 end)
 
+  @spec safe_trend?([integer()]) :: boolean()
   def safe_trend?(diffs),
     do: Enum.all?(diffs, fn d -> d > 0 end) || Enum.all?(diffs, fn d -> d < 0 end)
 
