@@ -25,24 +25,40 @@ defmodule AoC.Day03 do
   def part_1(data) do
     data
     |> Enum.map(&String.trim/1)
-    |> Enum.map(&extract_instructions/1)
+    |> Enum.map(&extract_instructions(&1, ~r/mul\(\d{1,3},\d{1,3}\)/))
     |> List.flatten()
-    |> Enum.sum()
+    |> Enum.reduce(%{enabled: true, acc: 0}, &run_instruction/2)
+    |> Map.get(:acc)
   end
 
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.count()
+    |> Enum.map(&String.trim/1)
+    |> Enum.map(&extract_instructions(&1, ~r/do\(\)|don't\(\)|mul\(\d{1,3},\d{1,3}\)/))
+    |> List.flatten()
+    |> Enum.reduce(%{enabled: true, acc: 0}, &run_instruction/2)
+    |> Map.get(:acc)
   end
 
-  defp extract_instructions(str) do
-    Regex.scan(~r/mul\((\d{1,3}),(\d{1,3})\)/, str)
-    |> Enum.map(fn [_, a_str, b_str] ->
-      {a, _} = Integer.parse(a_str)
-      {b, _} = Integer.parse(b_str)
-      {a, b}
-    end)
-    |> Enum.reduce([], fn {a, b}, acc -> [a * b | acc] end)
+  def extract_instructions(str, regex), do: regex |> Regex.scan(str) |> List.flatten()
+
+  def run_instruction("do()", state) do
+    %{state | enabled: true}
+  end
+
+  def run_instruction("don't()", state) do
+    %{state | enabled: false}
+  end
+
+  def run_instruction("mul(" <> _, %{enabled: false} = state) do
+    state
+  end
+
+  def run_instruction("mul(" <> _ = inst, state) do
+    [_, a_str, b_str] = Regex.run(~r/mul\((\d{1,3}),(\d{1,3})\)/, inst)
+    {a, _} = Integer.parse(a_str)
+    {b, _} = Integer.parse(b_str)
+    Map.update!(state, :acc, &(&1 + a * b))
   end
 end
