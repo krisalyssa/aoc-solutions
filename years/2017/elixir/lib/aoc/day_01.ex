@@ -24,7 +24,13 @@ defmodule AoC.Day01 do
   @spec part_1(Enumerable.t()) :: integer()
   def part_1(data) do
     data
-    |> Enum.count()
+    |> Enum.to_list()
+    |> List.first()
+
+    |> chunk()
+    |> Enum.filter(fn [a, b] -> a == b end)
+    |> Enum.map(fn [a, _] -> a end)
+    |> Enum.sum()
   end
 
   @spec part_2(Enumerable.t()) :: integer()
@@ -32,4 +38,12 @@ defmodule AoC.Day01 do
     data
     |> Enum.count()
   end
+
+  def chunk(str),
+    do:
+      str
+      |> String.trim()
+      |> String.graphemes()
+      |> Enum.map(&String.to_integer/1)
+      |> Enum.chunk_every(2, 1, [String.to_integer(String.first(str))])
 end
