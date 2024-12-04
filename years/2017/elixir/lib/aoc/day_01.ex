@@ -26,7 +26,6 @@ defmodule AoC.Day01 do
     data
     |> Enum.to_list()
     |> List.first()
-
     |> chunk()
     |> Enum.filter(fn [a, b] -> a == b end)
     |> Enum.map(fn [a, _] -> a end)
@@ -36,14 +35,24 @@ defmodule AoC.Day01 do
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.count()
+    |> Enum.to_list()
+    |> List.first()
+    |> bisect()
+    |> Tuple.to_list()
+    |> Enum.map(&digits/1)
+    |> List.zip()
+    |> Enum.filter(fn {a, b} -> a == b end)
+    |> Enum.map(fn {a, _} -> a * 2 end)
+    |> Enum.sum()
   end
+
+  def bisect(str), do: String.split_at(str, Integer.floor_div(String.length(str), 2))
 
   def chunk(str),
     do:
       str
-      |> String.trim()
-      |> String.graphemes()
-      |> Enum.map(&String.to_integer/1)
+      |> digits()
       |> Enum.chunk_every(2, 1, [String.to_integer(String.first(str))])
+
+  def digits(str), do: str |> String.trim() |> String.graphemes() |> Enum.map(&String.to_integer/1)
 end

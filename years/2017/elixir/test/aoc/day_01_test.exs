@@ -19,7 +19,21 @@ defmodule AoC.Day01.Test do
 
   describe "part 2" do
     test "with sample data" do
-      assert Day01.part_2(["../data/01.txt"]) == 1
+      assert Day01.part_2(["1212"]) == 6
+      assert Day01.part_2(["1221"]) == 0
+      assert Day01.part_2(["123425"]) == 4
+      assert Day01.part_2(["123123"]) == 12
+      assert Day01.part_2(["12131415"]) == 4
+    end
+  end
+
+  describe "bisect/1" do
+    test "with sample data" do
+      assert Day01.bisect("1212") == {"12", "12"}
+      assert Day01.bisect("1221") == {"12", "21"}
+      assert Day01.bisect("123425") == {"123", "425"}
+      assert Day01.bisect("123123") == {"123", "123"}
+      assert Day01.bisect("12131415") == {"1213", "1415"}
     end
   end
 
