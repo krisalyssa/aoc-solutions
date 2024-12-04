@@ -34,6 +34,7 @@ defmodule AoC.MixProject do
       {:exprintf, "~> 0.2.1"},
       {:libgraph, "~> 0.16.0"},
       {:math, git: "https://github.com/krisalyssa/math.git"},
+      {:matrix_reloaded, "~> 2.3"},
       {:max, "~> 0.1.3"},
       {:mix_test_watch, "~> 1.2", only: :dev, runtime: false}
     ]
