@@ -26,22 +26,46 @@ defmodule AoC.Day01 do
     data
     |> Enum.to_list()
     |> List.first()
-    |> instructions()
+    |> instructions_part_1()
   end
 
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.count()
+    |> Enum.to_list()
+    |> List.first()
+    |> instructions_part_2()
   end
 
-  @spec instructions(String.t()) :: integer()
-  def instructions(str) do
+  @spec instructions_part_1(String.t()) :: integer()
+  def instructions_part_1(str) do
     str
     |> String.graphemes()
-    |> Enum.reduce(0, fn
-      "(", acc -> acc + 1
-      ")", acc -> acc - 1
+    |> Enum.with_index(1)
+    |> Enum.reduce_while(0, fn
+      {"(", _index}, acc ->
+        {:cont, acc + 1}
+
+      {")", _index}, acc ->
+        {:cont, acc - 1}
+    end)
+  end
+
+  @spec instructions_part_2(String.t()) :: integer()
+  def instructions_part_2(str) do
+    str
+    |> String.graphemes()
+    |> Enum.with_index(1)
+    |> Enum.reduce_while(0, fn
+      {"(", _index}, acc ->
+        {:cont, acc + 1}
+
+      {")", index}, acc ->
+        if acc > 0 do
+          {:cont, acc - 1}
+        else
+          {:halt, index}
+        end
     end)
   end
 end
