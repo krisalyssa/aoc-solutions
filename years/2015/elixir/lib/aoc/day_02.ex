@@ -24,7 +24,11 @@ defmodule AoC.Day02 do
   @spec part_1(Enumerable.t()) :: integer()
   def part_1(data) do
     data
-    |> Enum.count()
+    |> Enum.map(&parse_line/1)
+    |> Enum.map(fn d -> Map.put(d, :surface_area, surface_area(d)) end)
+    |> Enum.map(fn d -> Map.put(d, :smallest_side, smallest_side(d)) end)
+    |> Enum.map(fn d -> Map.get(d, :surface_area) + Map.get(d, :smallest_side) end)
+    |> Enum.sum()
   end
 
   @spec part_2(Enumerable.t()) :: integer()
@@ -32,4 +36,22 @@ defmodule AoC.Day02 do
     data
     |> Enum.count()
   end
+
+  @spec parse_line(String.t()) :: %{String.t() => integer()}
+  def parse_line(line) do
+    ~r/(?<length>\d+)x(?<width>\d+)x(?<height>\d+)/
+    |> Regex.named_captures(line)
+    |> Enum.map(fn {k, v} -> {String.to_atom(k), String.to_integer(v)} end)
+    |> Map.new()
+  end
+
+  def smallest_side(dimensions),
+    do: Enum.min([side_lh(dimensions), side_lw(dimensions), side_wh(dimensions)])
+
+  def surface_area(dimensions),
+    do: 2 * side_lh(dimensions) + 2 * side_lw(dimensions) + 2 * side_wh(dimensions)
+
+  defp side_lh(%{length: l, height: h}), do: l * h
+  defp side_lw(%{length: l, width: w}), do: l * w
+  defp side_wh(%{width: w, height: h}), do: w * h
 end
