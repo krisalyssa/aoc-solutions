@@ -8,15 +8,21 @@ defmodule AoC.Day01.Test do
   # comment this out to always log to the console
   @moduletag :capture_log
 
-  describe "part 1" do
+  describe "part 2" do
     test "with sample data" do
-      assert Day01.part_1(["../data/01.txt"]) == 0
+      assert Day01.part_2(["../data/01.txt"]) == 1
     end
   end
 
-  describe "part 2" do
-    test "with sample data" do
-      assert Day01.part_2(["../data/01.txt"]) == 0
-    end
+  describe "instructions/1" do
+    assert Day01.instructions("(())") == 0
+    assert Day01.instructions("()()") == 0
+    assert Day01.instructions("(((") == 3
+    assert Day01.instructions("(()(()(") == 3
+    assert Day01.instructions("))(((((") == 3
+    assert Day01.instructions("())") == -1
+    assert Day01.instructions("))(") == -1
+    assert Day01.instructions(")))") == -3
+    assert Day01.instructions(")())())") == -3
   end
 end

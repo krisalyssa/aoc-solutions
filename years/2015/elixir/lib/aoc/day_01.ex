@@ -24,12 +24,24 @@ defmodule AoC.Day01 do
   @spec part_1(Enumerable.t()) :: integer()
   def part_1(data) do
     data
-    |> Enum.count()
+    |> Enum.to_list()
+    |> List.first()
+    |> instructions()
   end
 
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
     |> Enum.count()
+  end
+
+  @spec instructions(String.t()) :: integer()
+  def instructions(str) do
+    str
+    |> String.graphemes()
+    |> Enum.reduce(0, fn
+      "(", acc -> acc + 1
+      ")", acc -> acc - 1
+    end)
   end
 end
