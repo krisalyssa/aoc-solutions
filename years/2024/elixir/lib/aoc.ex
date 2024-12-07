@@ -2,6 +2,7 @@ defmodule AoC do
   @moduledoc """
   Utility functions.
   """
+  require Integer
 
   @doc """
   Split something in half, if it makes sense to be able to split it.
@@ -30,9 +31,10 @@ defmodule AoC do
     len = String.length(str)
     {left, right} = String.split_at(str, Integer.floor_div(len, 2))
 
-    case Integer.mod(len, 2) do
-      0 -> {left, right}
-      1 -> {left, String.first(right), String.slice(right, 1..-1//1)}
+    if Integer.is_even(len) do
+      {left, right}
+    else
+      {left, String.first(right), String.slice(right, 1..-1//1)}
     end
   end
 
@@ -40,9 +42,10 @@ defmodule AoC do
     len = Enum.count(list)
     half_len = Integer.floor_div(len, 2)
 
-    case Integer.mod(len, 2) do
-      0 -> {Enum.take(list, half_len), Enum.drop(list, half_len)}
-      1 -> {Enum.take(list, half_len), [Enum.at(list, half_len)], Enum.drop(list, half_len + 1)}
+    if Integer.is_even(len) do
+      {Enum.take(list, half_len), Enum.drop(list, half_len)}
+    else
+      {Enum.take(list, half_len), [Enum.at(list, half_len)], Enum.drop(list, half_len + 1)}
     end
   end
 end
