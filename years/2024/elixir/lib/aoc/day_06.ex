@@ -82,20 +82,20 @@ defmodule AoC.Day06 do
   end
 
   @spec step({Matrix.t(), State.t()}) :: {Matrix.t(), State.t()}
-  def step({grid, %State{index: index} = state}) do
+  def step({grid, state}) do
     {max_m, max_n} = Matrix.size(grid)
 
-    {:ok, visited_grid} = Matrix.update_element(grid, ?X, index)
+    {visited_grid, visited_state} = visit({grid, state})
 
-    new_heading = rotate(state, collision?(grid, state)).heading
-    {new_m, new_n} = new_index = move(%State{state | heading: new_heading})
+    new_heading = rotate(state, collision?(visited_grid, visited_state)).heading
+    {new_m, new_n} = new_index = move(%State{visited_state | heading: new_heading})
 
     if new_m < 0 || new_n < 0 || new_m >= max_m || new_n >= max_n do
-      {visited_grid, %{state | index: {new_m, new_n}, heading: :exited}}
+      {visited_grid, %{visited_state | index: {new_m, new_n}, heading: :exited}}
     else
       {:ok, updated_grid} = Matrix.update_element(visited_grid, guard(new_heading), new_index)
 
-      {updated_grid, %State{state | index: new_index, heading: new_heading}}
+      {updated_grid, %State{visited_state | index: new_index, heading: new_heading}}
     end
   end
 
@@ -136,4 +136,10 @@ defmodule AoC.Day06 do
   defp rotate(%State{heading: :south} = state, true), do: %State{state | heading: :west}
   defp rotate(%State{heading: :west} = state, true), do: %State{state | heading: :north}
   defp rotate(state, false), do: state
+
+  defp visit({grid, %State{index: index, heading: heading, visited: visited} = state}) do
+    {:ok, updated_grid} = Matrix.update_element(grid, ?X, index)
+    updated_visited = Map.put(visited, {index, heading}, true)
+    {updated_grid, %State{state | visited: updated_visited}}
+  end
 end

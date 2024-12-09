@@ -79,8 +79,8 @@ defmodule AoC.Day06.Test do
     end
 
     test "rotated step" do
-      {grid, _} = Day06.load_grid(@sample_data)
-      state = %State{index: {1, 4}, heading: :north}
+      {grid, state} = Day06.load_grid(@sample_data)
+      state = %State{state | index: {1, 4}, heading: :north}
       {grid_after, state_after} = Day06.step({grid, state})
 
       assert grid_after == [
@@ -101,8 +101,8 @@ defmodule AoC.Day06.Test do
     end
 
     test "exiting step" do
-      {grid, _} = Day06.load_grid(@sample_data)
-      state = %State{index: {9, 7}, heading: :south}
+      {grid, state} = Day06.load_grid(@sample_data)
+      state = %State{state | index: {9, 7}, heading: :south}
       {grid_after, state_after} = Day06.step({grid, state})
 
       assert grid_after == [
