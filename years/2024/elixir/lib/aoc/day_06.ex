@@ -3,6 +3,21 @@ defmodule AoC.Day06 do
 
   alias MatrixReloaded.Matrix
 
+  @type index :: {integer(), integer()}
+
+  defmodule State do
+    @moduledoc false
+
+    defstruct [:index, :heading]
+
+    @type heading :: :north | :east | :south | :west | :exited
+
+    @type t :: %__MODULE__{
+            index: AoC.Day06.index(),
+            heading: heading()
+          }
+  end
+
   @spec run() :: :ok
   def run do
     IO.puts("day 06 part 1: #{AoC.Day06.run_part_1("../data/06.txt")}")
@@ -41,7 +56,7 @@ defmodule AoC.Day06 do
     |> Enum.count()
   end
 
-  @spec index_grid(Matrix.t()) :: [{number(), {number(), number()}}]
+  @spec index_grid(Matrix.t()) :: [{number(), index()}]
   def index_grid(grid) do
     grid
     |> Enum.with_index()
@@ -52,6 +67,7 @@ defmodule AoC.Day06 do
     |> List.flatten()
   end
 
+  @spec load_grid([String.t()]) :: {Matrix.t(), State.t()}
   def load_grid(data) do
     grid = AoC.load_grid(data)
 
@@ -61,38 +77,40 @@ defmodule AoC.Day06 do
       |> Enum.find(fn {c, _} -> c == ?^ end)
 
     {:ok, grid_without_guard} = Matrix.update_element(grid, ?., starting_position)
-    {grid_without_guard, {starting_position, :north}}
+    {grid_without_guard, %State{index: starting_position, heading: :north}}
   end
 
-  def step({grid, {index, _heading} = state}) do
+  @spec step({Matrix.t(), State.t()}) :: {Matrix.t(), State.t()}
+  def step({grid, %State{index: index} = state}) do
     {max_m, max_n} = Matrix.size(grid)
 
     {:ok, visited_grid} = Matrix.update_element(grid, ?X, index)
-    {_, rotated_heading} = rotated_state = rotate(state, collision?(grid, state))
-    {{new_m, new_n}, _} = new_state = {move(rotated_state), rotated_heading}
+
+    new_heading = rotate(state, collision?(grid, state)).heading
+    {new_m, new_n} = new_index = move(%State{state | heading: new_heading})
 
     if new_m < 0 || new_n < 0 || new_m >= max_m || new_n >= max_n do
-      {visited_grid, {{new_m, new_n}, :exited}}
+      {visited_grid, %{state | index: {new_m, new_n}, heading: :exited}}
     else
-      {:ok, updated_grid} =
-        Matrix.update_element(visited_grid, guard(rotated_heading), {new_m, new_n})
+      {:ok, updated_grid} = Matrix.update_element(visited_grid, guard(new_heading), new_index)
 
-      {updated_grid, new_state}
+      {updated_grid, %State{state | index: new_index, heading: new_heading}}
     end
   end
 
-  def walk({_, {_, :exited}} = grid_and_state), do: grid_and_state
+  @spec walk({Matrix.t(), State.t()}) :: {Matrix.t(), State.t()}
+  def walk({_, %State{heading: :exited}} = grid_and_state), do: grid_and_state
   def walk({grid, state}), do: walk(step({grid, state}))
 
-  defp collision?(_, {{0, _}, :north}) do
+  defp collision?(_, %State{index: {0, _}, heading: :north}) do
     false
   end
 
-  defp collision?(_, {{_, 0}, :west}) do
+  defp collision?(_, %State{index: {_, 0}, heading: :west}) do
     false
   end
 
-  defp collision?(grid, {{m, n}, heading} = state) do
+  defp collision?(grid, %State{index: {m, n}, heading: heading} = state) do
     {max_m, max_n} = Matrix.size(grid)
 
     if (heading == :east && m + 1 >= max_m) || (heading == :south && n + 1 >= max_n) do
@@ -107,14 +125,14 @@ defmodule AoC.Day06 do
   defp guard(:south), do: ?v
   defp guard(:west), do: ?<
 
-  defp move({{m, n}, :north}), do: {m - 1, n}
-  defp move({{m, n}, :south}), do: {m + 1, n}
-  defp move({{m, n}, :east}), do: {m, n + 1}
-  defp move({{m, n}, :west}), do: {m, n - 1}
+  defp move(%State{index: {m, n}, heading: :north}), do: {m - 1, n}
+  defp move(%State{index: {m, n}, heading: :south}), do: {m + 1, n}
+  defp move(%State{index: {m, n}, heading: :east}), do: {m, n + 1}
+  defp move(%State{index: {m, n}, heading: :west}), do: {m, n - 1}
 
-  defp rotate({index, :north}, true), do: {index, :east}
-  defp rotate({index, :east}, true), do: {index, :south}
-  defp rotate({index, :south}, true), do: {index, :west}
-  defp rotate({index, :west}, true), do: {index, :north}
+  defp rotate(%State{heading: :north} = state, true), do: %State{state | heading: :east}
+  defp rotate(%State{heading: :east} = state, true), do: %State{state | heading: :south}
+  defp rotate(%State{heading: :south} = state, true), do: %State{state | heading: :west}
+  defp rotate(%State{heading: :west} = state, true), do: %State{state | heading: :north}
   defp rotate(state, false), do: state
 end

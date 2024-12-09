@@ -4,6 +4,7 @@ defmodule AoC.Day06.Test do
   use ExUnit.Case, async: false
 
   alias AoC.Day06
+  alias AoC.Day06.State
 
   # comment this out to always log to the console
   @moduletag :capture_log
@@ -47,7 +48,7 @@ defmodule AoC.Day06.Test do
                   ~c"........#.",
                   ~c"#.........",
                   ~c"......#..."
-                ], {{6, 4}, :north}}
+                ], %State{index: {6, 4}, heading: :north}}
     end
   end
 
@@ -67,13 +68,13 @@ defmodule AoC.Day06.Test do
                   ~c"........#.",
                   ~c"#.........",
                   ~c"......#..."
-                ], {{5, 4}, :north}}
+                ], %State{index: {5, 4}, heading: :north}}
     end
 
     test "rotated step" do
       {grid, _} = Day06.load_grid(@sample_data)
 
-      assert Day06.step({grid, {{1, 4}, :north}}) ==
+      assert Day06.step({grid, %State{index: {1, 4}, heading: :north}}) ==
                {[
                   ~c"....#.....",
                   ~c"....X>...#",
@@ -85,13 +86,13 @@ defmodule AoC.Day06.Test do
                   ~c"........#.",
                   ~c"#.........",
                   ~c"......#..."
-                ], {{1, 5}, :east}}
+                ], %State{index: {1, 5}, heading: :east}}
     end
 
     test "exiting step" do
       {grid, _} = Day06.load_grid(@sample_data)
 
-      assert Day06.step({grid, {{9, 7}, :south}}) ==
+      assert Day06.step({grid, %State{index: {9, 7}, heading: :south}}) ==
                {[
                   ~c"....#.....",
                   ~c".........#",
@@ -103,7 +104,7 @@ defmodule AoC.Day06.Test do
                   ~c"........#.",
                   ~c"#.........",
                   ~c"......#X.."
-                ], {{10, 7}, :exited}}
+                ], %State{index: {10, 7}, heading: :exited}}
     end
   end
 
@@ -123,7 +124,7 @@ defmodule AoC.Day06.Test do
                   ~c".XXXXXXX#.",
                   ~c"#XXXXXXX..",
                   ~c"......#X.."
-                ], {{10, 7}, :exited}}
+                ], %State{index: {10, 7}, heading: :exited}}
     end
   end
 end
