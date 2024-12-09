@@ -8,13 +8,14 @@ defmodule AoC.Day06 do
   defmodule State do
     @moduledoc false
 
-    defstruct [:index, :heading]
+    defstruct [:index, :heading, :visited]
 
     @type heading :: :north | :east | :south | :west | :exited
 
     @type t :: %__MODULE__{
             index: AoC.Day06.index(),
-            heading: heading()
+            heading: heading(),
+            visited: %{{AoC.Day06.index(), :heading} => boolean()}
           }
   end
 
@@ -77,7 +78,7 @@ defmodule AoC.Day06 do
       |> Enum.find(fn {c, _} -> c == ?^ end)
 
     {:ok, grid_without_guard} = Matrix.update_element(grid, ?., starting_position)
-    {grid_without_guard, %State{index: starting_position, heading: :north}}
+    {grid_without_guard, %State{index: starting_position, heading: :north, visited: %{}}}
   end
 
   @spec step({Matrix.t(), State.t()}) :: {Matrix.t(), State.t()}
