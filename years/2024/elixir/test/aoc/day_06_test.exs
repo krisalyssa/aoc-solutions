@@ -36,95 +36,113 @@ defmodule AoC.Day06.Test do
 
   describe "load_grid/1" do
     test "with sample data" do
-      assert Day06.load_grid(@sample_data) ==
-               {[
-                  ~c"....#.....",
-                  ~c".........#",
-                  ~c"..........",
-                  ~c"..#.......",
-                  ~c".......#..",
-                  ~c"..........",
-                  ~c".#........",
-                  ~c"........#.",
-                  ~c"#.........",
-                  ~c"......#..."
-                ], %State{index: {6, 4}, heading: :north}}
+      {grid, state} = Day06.load_grid(@sample_data)
+
+      assert grid == [
+               ~c"....#.....",
+               ~c".........#",
+               ~c"..........",
+               ~c"..#.......",
+               ~c".......#..",
+               ~c"..........",
+               ~c".#........",
+               ~c"........#.",
+               ~c"#.........",
+               ~c"......#..."
+             ]
+
+      assert state.index == {6, 4}
+      assert state.heading == :north
     end
   end
 
   describe "step/1" do
     test "forward step" do
       {grid, state} = Day06.load_grid(@sample_data)
+      {grid_after, state_after} = Day06.step({grid, state})
 
-      assert Day06.step({grid, state}) ==
-               {[
-                  ~c"....#.....",
-                  ~c".........#",
-                  ~c"..........",
-                  ~c"..#.......",
-                  ~c".......#..",
-                  ~c"....^.....",
-                  ~c".#..X.....",
-                  ~c"........#.",
-                  ~c"#.........",
-                  ~c"......#..."
-                ], %State{index: {5, 4}, heading: :north}}
+      assert grid_after == [
+               ~c"....#.....",
+               ~c".........#",
+               ~c"..........",
+               ~c"..#.......",
+               ~c".......#..",
+               ~c"....^.....",
+               ~c".#..X.....",
+               ~c"........#.",
+               ~c"#.........",
+               ~c"......#..."
+             ]
+
+      assert state_after.index == {5, 4}
+      assert state_after.heading == :north
     end
 
     test "rotated step" do
       {grid, _} = Day06.load_grid(@sample_data)
+      state = %State{index: {1, 4}, heading: :north}
+      {grid_after, state_after} = Day06.step({grid, state})
 
-      assert Day06.step({grid, %State{index: {1, 4}, heading: :north}}) ==
-               {[
-                  ~c"....#.....",
-                  ~c"....X>...#",
-                  ~c"..........",
-                  ~c"..#.......",
-                  ~c".......#..",
-                  ~c"..........",
-                  ~c".#........",
-                  ~c"........#.",
-                  ~c"#.........",
-                  ~c"......#..."
-                ], %State{index: {1, 5}, heading: :east}}
+      assert grid_after == [
+               ~c"....#.....",
+               ~c"....X>...#",
+               ~c"..........",
+               ~c"..#.......",
+               ~c".......#..",
+               ~c"..........",
+               ~c".#........",
+               ~c"........#.",
+               ~c"#.........",
+               ~c"......#..."
+             ]
+
+      assert state_after.index == {1, 5}
+      assert state_after.heading == :east
     end
 
     test "exiting step" do
       {grid, _} = Day06.load_grid(@sample_data)
+      state = %State{index: {9, 7}, heading: :south}
+      {grid_after, state_after} = Day06.step({grid, state})
 
-      assert Day06.step({grid, %State{index: {9, 7}, heading: :south}}) ==
-               {[
-                  ~c"....#.....",
-                  ~c".........#",
-                  ~c"..........",
-                  ~c"..#.......",
-                  ~c".......#..",
-                  ~c"..........",
-                  ~c".#........",
-                  ~c"........#.",
-                  ~c"#.........",
-                  ~c"......#X.."
-                ], %State{index: {10, 7}, heading: :exited}}
+      assert grid_after == [
+               ~c"....#.....",
+               ~c".........#",
+               ~c"..........",
+               ~c"..#.......",
+               ~c".......#..",
+               ~c"..........",
+               ~c".#........",
+               ~c"........#.",
+               ~c"#.........",
+               ~c"......#X.."
+             ]
+
+      assert state_after.index == {10, 7}
+      assert state_after.heading == :exited
     end
   end
 
   describe "walk/1" do
     test "with sample data" do
       {grid, state} = Day06.load_grid(@sample_data)
+      {grid_after, state_after} = Day06.walk({grid, state})
 
-      assert Day06.walk({grid, state}) ==
-               {[
-                  ~c"....#.....",
-                  ~c"....XXXXX#",
-                  ~c"....X...X.",
-                  ~c"..#.X...X.",
-                  ~c"..XXXXX#X.",
-                  ~c"..X.X.X.X.",
-                  ~c".#XXXXXXX.",
-                  ~c".XXXXXXX#.",
-                  ~c"#XXXXXXX..",
-                  ~c"......#X.."
-                ], %State{index: {10, 7}, heading: :exited}}
+      assert grid_after == [
+               ~c"....#.....",
+               ~c"....XXXXX#",
+               ~c"....X...X.",
+               ~c"..#.X...X.",
+               ~c"..XXXXX#X.",
+               ~c"..X.X.X.X.",
+               ~c".#XXXXXXX.",
+               ~c".XXXXXXX#.",
+               ~c"#XXXXXXX..",
+               ~c"......#X.."
+             ]
+
+      assert state_after.index == {10, 7}
+      assert state_after.heading == :exited
     end
   end
 end
