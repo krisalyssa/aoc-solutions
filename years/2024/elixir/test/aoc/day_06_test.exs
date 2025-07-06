@@ -30,7 +30,7 @@ defmodule AoC.Day06.Test do
 
   describe "part 2" do
     test "with sample data" do
-      assert Day06.part_2(["../data/06.txt"]) == 1
+      assert Day06.part_2(@sample_data) == 6
     end
   end
 
@@ -53,12 +53,15 @@ defmodule AoC.Day06.Test do
 
       assert state.index == {6, 4}
       assert state.heading == :north
+      assert state.visited == %{}
     end
   end
 
   describe "step/1" do
     test "forward step" do
       {grid, state} = Day06.load_grid(@sample_data)
+      refute Map.has_key?(state.visited, {{6, 4}, :north})
+
       {grid_after, state_after} = Day06.step({grid, state})
 
       assert grid_after == [
@@ -76,11 +79,14 @@ defmodule AoC.Day06.Test do
 
       assert state_after.index == {5, 4}
       assert state_after.heading == :north
+      assert Map.has_key?(state_after.visited, {{6, 4}, :north})
     end
 
     test "rotated step" do
       {grid, state} = Day06.load_grid(@sample_data)
       state = %State{state | index: {1, 4}, heading: :north}
+      refute Map.has_key?(state.visited, {{1, 4}, :north})
+
       {grid_after, state_after} = Day06.step({grid, state})
 
       assert grid_after == [
@@ -98,11 +104,14 @@ defmodule AoC.Day06.Test do
 
       assert state_after.index == {1, 5}
       assert state_after.heading == :east
+      assert Map.has_key?(state_after.visited, {{1, 4}, :north})
     end
 
     test "exiting step" do
       {grid, state} = Day06.load_grid(@sample_data)
       state = %State{state | index: {9, 7}, heading: :south}
+      refute Map.has_key?(state, {{9, 7}, :south})
+
       {grid_after, state_after} = Day06.step({grid, state})
 
       assert grid_after == [
@@ -120,6 +129,7 @@ defmodule AoC.Day06.Test do
 
       assert state_after.index == {10, 7}
       assert state_after.heading == :exited
+      assert Map.has_key?(state_after.visited, {{9, 7}, :south})
     end
   end
 
@@ -143,6 +153,7 @@ defmodule AoC.Day06.Test do
 
       assert state_after.index == {10, 7}
       assert state_after.heading == :exited
+      assert state_after.visited |> Enum.to_list() |> Enum.count() == 45
     end
   end
 end
