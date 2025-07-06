@@ -45,4 +45,32 @@ defmodule AoC do
       1 -> {Enum.take(list, half_len), [Enum.at(list, half_len)], Enum.drop(list, half_len + 1)}
     end
   end
+
+  @doc ~S"""
+  Print the solution for a day, in JSON format.
+
+  ## Examples
+
+      iex> AoC.print(1, 234, 567)
+      {
+        "day_01": [
+          234,
+          567
+        ]
+      }
+  """
+  @spec print(number() | String.t(), number() | String.t(), number() | String.t()) :: String.t()
+  def print(day, s1, s2) do
+    """
+    {
+      "day_#{day_str(day)}": [
+        #{s1},
+        #{s2}
+      ]
+    }
+    """
+  end
+
+  defp day_str(d) when is_binary(d), do: d
+  defp day_str(d), do: String.pad_leading("#{d}", 2, "0")
 end
