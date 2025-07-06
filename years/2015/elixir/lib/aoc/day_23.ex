@@ -3,8 +3,14 @@ defmodule AoC.Day23 do
 
   @spec run() :: :ok
   def run do
-    IO.puts("day 23 part 1: #{AoC.Day23.run_part_1("../data/23.txt")}")
-    IO.puts("day 23 part 2: #{AoC.Day23.run_part_2("../data/23.txt")}")
+    IO.puts("""
+    {
+      "day_32": [
+        #{AoC.Day23.run_part_1("../data/23.txt")},
+        #{AoC.Day23.run_part_2("../data/23.txt")}
+      ]
+    }
+    """)
   end
 
   @spec run_part_1(String.t()) :: number()
