@@ -32,24 +32,27 @@ defmodule AoC.Day04 do
     |> Enum.take(1)
     |> List.first()
     |> String.trim()
-    |> advent_coin()
+    |> advent_coin("00000")
   end
 
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.count()
+    |> Enum.take(1)
+    |> List.first()
+    |> String.trim()
+    |> advent_coin("000000")
   end
 
-  def advent_coin(prefix), do: advent_coin(prefix, 1)
+  def advent_coin(secret, prefix), do: advent_coin(secret, 1, prefix)
 
-  def advent_coin(prefix, index) do
-    case md5("#{prefix}#{index}") do
-      "00000" <> _ ->
+  def advent_coin(secret, index, prefix) do
+    case md5("#{secret}#{index}") do
+      ^prefix <> _ ->
         index
 
       _ ->
-        advent_coin(prefix, index + 1)
+        advent_coin(secret, index + 1, prefix)
       end
   end
 
