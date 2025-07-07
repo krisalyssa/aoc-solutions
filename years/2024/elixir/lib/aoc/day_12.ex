@@ -2,10 +2,7 @@ defmodule AoC.Day12 do
   @moduledoc false
 
   @spec run() :: :ok
-  def run do
-    IO.puts("day 12 part 1: #{AoC.Day12.run_part_1("../data/12.txt")}")
-    IO.puts("day 12 part 2: #{AoC.Day12.run_part_2("../data/12.txt")}")
-  end
+  def run, do: IO.puts(AoC.print(12, AoC.Day12.run_part_1("../data/12.txt"), AoC.Day12.run_part_2("../data/12.txt")))
 
   @spec run_part_1(String.t()) :: number()
   def run_part_1(filename) do
