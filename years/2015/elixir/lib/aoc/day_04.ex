@@ -29,7 +29,10 @@ defmodule AoC.Day04 do
   @spec part_1(Enumerable.t()) :: integer()
   def part_1(data) do
     data
-    |> Enum.count()
+    |> Enum.take(1)
+    |> List.first()
+    |> String.trim()
+    |> advent_coin()
   end
 
   @spec part_2(Enumerable.t()) :: integer()
@@ -37,4 +40,18 @@ defmodule AoC.Day04 do
     data
     |> Enum.count()
   end
+
+  def advent_coin(prefix), do: advent_coin(prefix, 1)
+
+  def advent_coin(prefix, index) do
+    case md5("#{prefix}#{index}") do
+      "00000" <> _ ->
+        index
+
+      _ ->
+        advent_coin(prefix, index + 1)
+      end
+  end
+
+  def md5(str), do: :crypto.hash(:md5, str) |> Base.encode16(case: :lower)
 end
