@@ -17,7 +17,6 @@ defmodule AoC.Day03.Test do
   end
 
   describe "part 2" do
-    @tag :skip
     test "with sample data" do
       assert Day03.part_2(["^v"]) == 3
       assert Day03.part_2(["^>v<"]) == 3

@@ -37,7 +37,7 @@ defmodule AoC.Day03 do
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.reduce({%{{0, 0} => 1}, [{0, 0}]}, &move_all/2)
+    |> Enum.reduce({%{{0, 0} => 1}, [{0, 0}, {0, 0}]}, &move_all/2)
     |> elem(0)
     |> Enum.count(fn {_, v} -> v >= 1 end)
   end
@@ -49,10 +49,18 @@ defmodule AoC.Day03 do
     |> Enum.reduce(state, fn m, acc -> move(m, acc) end)
   end
 
-  defp move(">", {grid, [{x, y}]}), do: {Map.update(grid, {x + 1, y}, 1, &(&1 + 1)), [{x + 1, y}]}
-  defp move("<", {grid, [{x, y}]}), do: {Map.update(grid, {x - 1, y}, 1, &(&1 + 1)), [{x - 1, y}]}
-  defp move("^", {grid, [{x, y}]}), do: {Map.update(grid, {x, y + 1}, 1, &(&1 + 1)), [{x, y + 1}]}
-  defp move("v", {grid, [{x, y}]}), do: {Map.update(grid, {x, y - 1}, 1, &(&1 + 1)), [{x, y - 1}]}
+  defp move(">", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x + 1, y})
+  defp move("<", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x - 1, y})
+  defp move("^", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x, y + 1})
+  defp move("v", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x, y - 1})
 
   defp move(instruction, _), do: raise("unexpected instruction #{inspect(instruction)}")
+
+  defp move_to({grid, locations}, new_location),
+    do: {
+      Map.update(grid, new_location, 1, &(&1 + 1)),
+      locations
+      |> List.update_at(0, fn _ -> new_location end)
+      |> Enum.slide(0, -1)
+    }
 end
