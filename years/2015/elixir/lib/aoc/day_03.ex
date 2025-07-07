@@ -2,7 +2,15 @@ defmodule AoC.Day03 do
   @moduledoc false
 
   @spec run() :: :ok
-  def run, do: IO.puts(AoC.print(3, AoC.Day03.run_part_1("../data/03.txt"), AoC.Day03.run_part_2("../data/03.txt")))
+  def run,
+    do:
+      IO.puts(
+        AoC.print(
+          3,
+          AoC.Day03.run_part_1("../data/03.txt"),
+          AoC.Day03.run_part_2("../data/03.txt")
+        )
+      )
 
   @spec run_part_1(String.t()) :: number()
   def run_part_1(filename) do
@@ -21,12 +29,38 @@ defmodule AoC.Day03 do
   @spec part_1(Enumerable.t()) :: integer()
   def part_1(data) do
     data
-    |> Enum.count()
+    |> Enum.reduce({%{{0, 0} => 1}, [{0, 0}]}, &move_all/2)
+    |> elem(0)
+    |> Enum.count(fn {_, v} -> v >= 1 end)
   end
 
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.count()
+    |> Enum.reduce({%{{0, 0} => 1}, [{0, 0}, {0, 0}]}, &move_all/2)
+    |> elem(0)
+    |> Enum.count(fn {_, v} -> v >= 1 end)
   end
+
+  def move_all(str, state) do
+    str
+    |> String.trim()
+    |> String.graphemes()
+    |> Enum.reduce(state, fn m, acc -> move(m, acc) end)
+  end
+
+  defp move(">", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x + 1, y})
+  defp move("<", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x - 1, y})
+  defp move("^", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x, y + 1})
+  defp move("v", {_grid, [{x, y} | _t]} = state), do: move_to(state, {x, y - 1})
+
+  defp move(instruction, _), do: raise("unexpected instruction #{inspect(instruction)}")
+
+  defp move_to({grid, locations}, new_location),
+    do: {
+      Map.update(grid, new_location, 1, &(&1 + 1)),
+      locations
+      |> List.update_at(0, fn _ -> new_location end)
+      |> Enum.slide(0, -1)
+    }
 end
