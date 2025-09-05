@@ -1,8 +1,11 @@
 #!env python
 # code: language=python insertSpaces=true tabSize=4
 
+import functools
 import io
 import json
+
+delta = {"(": 1, ")": -1}
 
 ##
 ## day 01 part 1
@@ -10,7 +13,7 @@ import json
 
 
 def part1(data):
-    return None
+    return functools.reduce(lambda acc, line: follow_instructions(acc, line), data, 0)
 
 
 ##
@@ -20,6 +23,10 @@ def part1(data):
 
 def part2(data):
     return None
+
+
+def follow_instructions(start, line):
+    return functools.reduce(lambda acc, c: acc + delta[c], line, start)
 
 
 ##
