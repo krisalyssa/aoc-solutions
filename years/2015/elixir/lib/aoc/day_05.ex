@@ -29,13 +29,14 @@ defmodule AoC.Day05 do
   @spec part_1(Enumerable.t()) :: integer()
   def part_1(data) do
     data
-    |> Enum.filter(&nice?/1)
+    |> Enum.filter(&part_1_nice?/1)
     |> Enum.count()
   end
 
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
+    |> Enum.filter(&part_2_nice?/1)
     |> Enum.count()
   end
 
@@ -53,7 +54,14 @@ defmodule AoC.Day05 do
     |> then(fn v -> v > 0 end)
   end
 
-  def nice?(str) do
+  def no_forbidden_strings?(str) do
+    ~r/ab|cd|pq|xy/
+    |> Regex.scan(str)
+    |> Enum.count()
+    |> then(fn v -> v == 0 end)
+  end
+
+  def part_1_nice?(str) do
     with true <- at_least_three_vowels?(str),
          true <- doubled_letters?(str),
          true <- no_forbidden_strings?(str) do
@@ -63,10 +71,26 @@ defmodule AoC.Day05 do
     end
   end
 
-  def no_forbidden_strings?(str) do
-    ~r/ab|cd|pq|xy/
+  def part_2_nice?(str) do
+    with true <- twice_no_overlap?(str),
+         true <- pattern_aba?(str) do
+      true
+    else
+      _ -> false
+    end
+  end
+
+  def pattern_aba?(str) do
+    ~r/(.).\1/
     |> Regex.scan(str)
     |> Enum.count()
-    |> then(fn v -> v == 0 end)
+    |> then(fn v -> v > 0 end)
+  end
+
+  def twice_no_overlap?(str) do
+    ~r/(.{2}).*\1/
+    |> Regex.scan(str)
+    |> Enum.count()
+    |> then(fn v -> v > 0 end)
   end
 end
