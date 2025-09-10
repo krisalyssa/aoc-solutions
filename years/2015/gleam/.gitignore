@@ -1,0 +1,5 @@
+# The directory compiled artifacts will be written to.
+/build/
+
+# The directory dependency sources will be written to.
+/deps/
