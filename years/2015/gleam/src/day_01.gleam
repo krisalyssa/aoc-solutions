@@ -10,14 +10,10 @@ pub fn main() {
     e -> Error(e)
   }
 
-  let output = [
-    #("day_01", json.array([
-      part_1(data),
-      part_2(data)
-    ], of: json.int))
-  ]
-  |> json.object()
-  |> json.to_string
+  let output =
+    [#("day_01", json.array([part_1(data), part_2(data)], of: json.int))]
+    |> json.object()
+    |> json.to_string
 
   io.print(output)
 }
