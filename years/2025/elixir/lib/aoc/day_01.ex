@@ -38,8 +38,12 @@ defmodule AoC.Day01 do
 
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
+    state = {50, 0}
+
     data
-    |> Enum.count()
+    |> Enum.map(&parse_instruction/1)
+    |> Enum.reduce(state, &spin_0x434C49434B/2)
+    |> elem(1)
   end
 
   @spec one_if_zero(position :: integer()) :: non_neg_integer()
@@ -74,5 +78,32 @@ defmodule AoC.Day01 do
   def spin({:ok, {:right, count}}, {position, zeros}) do
     new_position = position + count
     {new_position, zeros + one_if_zero(Integer.mod(new_position, 100))}
+  end
+
+  @spec spin_0x434C49434B(
+          instruction :: {:ok, {:left | :right, non_neg_integer()}} | {:error, any()},
+          state :: {integer(), non_neg_integer()}
+        ) :: {integer(), non_neg_integer()}
+
+  def spin_0x434C49434B({:ok, {_, 0}}, {position, zeros}) do
+    {position, zeros}
+  end
+
+  def spin_0x434C49434B({:ok, {:left, count}}, {position, zeros}) do
+    new_position = position - 1
+
+    spin_0x434C49434B(
+      {:ok, {:left, count - 1}},
+      {new_position, zeros + one_if_zero(Integer.mod(new_position, 100))}
+    )
+  end
+
+  def spin_0x434C49434B({:ok, {:right, count}}, {position, zeros}) do
+    new_position = position + 1
+
+    spin_0x434C49434B(
+      {:ok, {:right, count - 1}},
+      {new_position, zeros + one_if_zero(Integer.mod(new_position, 100))}
+    )
   end
 end
