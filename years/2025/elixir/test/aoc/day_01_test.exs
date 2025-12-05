@@ -42,7 +42,7 @@ defmodule AoC.Day01.Test do
         "L82"
       ]
 
-      assert Day01.part_2(data) == 10
+      assert Day01.part_2(data) == 6
     end
   end
 
