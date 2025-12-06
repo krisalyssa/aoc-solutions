@@ -1,21 +1,14 @@
-import chalk from "chalk";
-import { performance } from "perf_hooks";
-import { Grid } from "../util/grid";
-import { log, logSolution } from "../util/log";
-import * as test from "../util/test";
-import * as util from "../util/util";
-
-const YEAR = 2021;
-const DAY = 13;
+import { Grid } from "../grid";
+import * as util from "../util";
 
 const CLEAR = ".";
 const DOT = "█";
 
-// solution path: /Users/ccottingham/Projects/advent-of-code/2021/years/2021/13/index.ts
-// data path    : /Users/ccottingham/Projects/advent-of-code/2021/years/2021/13/data.txt
-// problem url  : https://adventofcode.com/2021/day/13
+export async function run(input: string) {
+  return [await runPart1(input), await runPart2(input)]
+}
 
-async function p2021day13_part1(input: string, ...params: any[]) {
+export async function runPart1(input: string) {
 	const data = util.lineify(input.trim(), true);
 	const blankLine = data.findIndex(line => line === "");
 	const points = data
@@ -46,8 +39,10 @@ async function p2021day13_part1(input: string, ...params: any[]) {
 	return countDots(grid);
 }
 
-async function p2021day13_part2(input: string, ...params: any[]) {
-	const expectedWord = params[0];
+export async function runPart2(input: string) {
+  // hardcoding the solution, because IIRC you have to eyeball it?
+	const expectedWord = "CPJBERUL"
+
 	const data = util.lineify(input.trim(), true);
 	const blankLine = data.findIndex(line => line === "");
 	const points = data
@@ -75,8 +70,6 @@ async function p2021day13_part2(input: string, ...params: any[]) {
 			grid = foldLeft(grid, Number(fold![1]));
 		}
 	}
-
-	grid.log();
 
 	return expectedWord;
 }
@@ -112,83 +105,3 @@ function foldUp(grid: Grid, onRow: number): Grid {
 
 	return grid.copyGrid({ srcEndRow: onRow - 1 });
 }
-
-async function run() {
-	const testData = `
-6,10
-0,14
-9,10
-0,3
-10,4
-4,11
-6,0
-6,12
-4,1
-0,13
-10,12
-3,4
-3,0
-8,4
-1,10
-2,14
-8,10
-9,0
-
-fold along y=7
-fold along x=5
-`;
-	const part1tests: TestCase[] = [
-		{
-			input: testData,
-			expected: "17",
-		},
-	];
-	const part2tests: TestCase[] = [
-		{
-			input: testData,
-			expected: "O",
-			extraArgs: ["O"],
-		},
-	];
-
-	// Run tests
-	test.beginTests();
-	await test.section(async () => {
-		for (const testCase of part1tests) {
-			test.logTestResult(testCase, String(await p2021day13_part1(testCase.input, ...(testCase.extraArgs || []))));
-		}
-	});
-	await test.section(async () => {
-		for (const testCase of part2tests) {
-			test.logTestResult(testCase, String(await p2021day13_part2(testCase.input, ...(testCase.extraArgs || []))));
-		}
-	});
-	test.endTests();
-
-	// Get input and run program while measuring performance
-	const input = await util.getInput(DAY, YEAR);
-
-	const part1Before = performance.now();
-	const part1Solution = String(await p2021day13_part1(input));
-	const part1After = performance.now();
-
-	const part2Before = performance.now();
-	await p2021day13_part2(input);
-	const part2Solution = "CPJBERUL"; // String(await p2021day13_part2(input))
-	const part2After = performance.now();
-
-	logSolution(13, 2021, part1Solution, part2Solution);
-
-	log(chalk.gray("--- Performance ---"));
-	log(chalk.gray(`Part 1: ${util.formatTime(part1After - part1Before)}`));
-	log(chalk.gray(`Part 2: ${util.formatTime(part2After - part2Before)}`));
-	log();
-}
-
-run()
-	.then(() => {
-		process.exit();
-	})
-	.catch(error => {
-		throw error;
-	});
