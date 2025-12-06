@@ -1,72 +1,30 @@
 {
-	"name": "advent-of-code",
-	"version": "1.0.0",
-	"description": "Solutions for Advent of Code",
-	"keywords": [
-		"advent-of-code",
-		"advent-of-code-2021",
-		"typescript"
-	],
-	"homepage": "https://github.com/krisalyssa/advent-of-code",
-	"bugs": {
-		"url": "https://github.com/krisalyssa/advent-of-code/issues"
-	},
-	"license": "MIT",
-	"contributors": [
-		{
-			"author": "Kris Cottingham <krisalyssa@cottingham.net> (https://krisalyssa.github.com/)"
-		},
-		{
-			"author": "Trevor Gau <t-hugs@github.com> (https://github.com/T-Hugs)"
-		}
-	],
-	"main": "index.ts",
-	"bin": {},
-	"man": [],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/krisalyssa/advent-of-code.git"
-	},
-	"scripts": {
-		"help": "ts-node init.ts -h",
-		"seed": "ts-node init.ts seed",
-		"solve": "ts-node bin/run.ts",
-		"submit": "ts-node submit.ts",
-		"suck": "ts-node init.ts suck",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"config": {},
-	"dependencies": {
-		"@flatten-js/core": "^1.3.1",
-		"@types/fast-levenshtein": "^0.0.2",
-		"@types/inquirer": "^8.1.3",
-		"@types/lodash": "^4.14.176",
-		"@types/mkdirp": "^1.0.2",
-		"@types/node": "^16.11.7",
-		"@types/node-localstorage": "^1.3.0",
-		"a-star": "^0.2.0",
-		"chalk": "^4.1.2",
-		"cross-fetch": "^3.1.4",
-		"fast-levenshtein": "^3.0.0",
-		"inquirer": "^8.2.0",
-		"js-combinatorics": "^1.5.4",
-		"lodash": "^4.17.21",
-		"mkdirp": "^1.0.4",
-		"node-localstorage": "^2.2.1",
-		"playwright-chromium": "^1.16.3",
-		"ts-matrix": "^1.1.0",
-		"ts-node": "^10.4.0",
-		"typescript": "^4.4.4"
-	},
-	"devDependencies": {},
-	"peerDependencies": {},
-	"peerDependenciesMeta": {},
-	"bundledDependencies": [],
-	"optionalDependencies": {},
-	"engines": {},
-	"os": [],
-	"cpu": [],
-	"private": false,
-	"publishConfig": {},
-	"workspaces": []
+  "name": "aoc",
+  "packageManager": "yarn@4.11.0",
+  "main": "index.ts",
+  "scripts": {
+    "day": "ts-node index.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@flatten-js/core": "^1.3.1",
+    "@types/lodash": "^4.14.176",
+    "@types/node": "^16.11.7",
+    "a-star": "^0.2.0",
+    "commander": "^14.0.2",
+    "lodash": "^4.17.21",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@commander-js/extra-typings": "^14.0.0",
+    "@types/eslint": "^9.6.1",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "jest": "^30.2.0",
+    "prettier": "3.6.2",
+    "ts-jest": "^29.4.5"
+  }
 }
