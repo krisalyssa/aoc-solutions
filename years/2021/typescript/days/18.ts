@@ -5,26 +5,24 @@
 // understand how it works. Everything successful about it should be credited to ric2b,
 // and everything which isn't is my fault.
 
-import chalk from "chalk";
-import { performance } from "perf_hooks";
-import { log, logSolution } from "../util/log";
-import * as test from "../util/test";
-import * as util from "../util/util";
+import * as util from "../util"
 
-const YEAR = 2021;
-const DAY = 18;
+type Tree = {
+	p: string;
+	v: any[] | number;
+};
 
-// solution path: /Users/ccottingham/Documents/Projects/advent-of-code/2021/years/2021/18/index.ts
-// data path    : /Users/ccottingham/Documents/Projects/advent-of-code/2021/years/2021/18/data.txt
-// problem url  : https://adventofcode.com/2021/day/18
+export async function run(input: string) {
+  return [await runPart1(input), await runPart2(input)]
+}
 
-async function p2021day18_part1(input: string, ...params: any[]) {
+export async function runPart1(input: string) {
 	const numbers = util.lineify(input.trim()).map(s => JSON.parse(s));
 
 	return magnitude(numbers.reduce(add));
 }
 
-async function p2021day18_part2(input: string, ...params: any[]) {
+export async function runPart2(input: string) {
 	const numbers = util.lineify(input.trim()).map(s => JSON.parse(s));
 
 	let max = 0;
@@ -41,11 +39,6 @@ async function p2021day18_part2(input: string, ...params: any[]) {
 
 	return max;
 }
-
-type Tree = {
-	p: string;
-	v: any[] | number;
-};
 
 function add(a: number, b: number) {
 	const sum = [a, b];
@@ -120,105 +113,3 @@ function treeNode(tree: Tree, path: string): Tree {
 			return tree;
 	}
 }
-
-async function run() {
-	const part1tests: TestCase[] = [
-		{
-			input: "[9,1]",
-			expected: "29",
-		},
-		{
-			input: "[1,9]",
-			expected: "21",
-		},
-		{
-			input: "[[9,1],[1,9]]",
-			expected: "129",
-		},
-		{
-			input: "[[1,2],[[3,4],5]]",
-			expected: "143",
-		},
-		{
-			input: "[[[[0,7],4],[[7,8],[6,0]]],[8,1]]",
-			expected: "1384",
-		},
-		{
-			input: "[[[[1,1],[2,2]],[3,3]],[4,4]]",
-			expected: "445",
-		},
-		{
-			input: "[[[[3,0],[5,3]],[4,4]],[5,5]]",
-			expected: "791",
-		},
-		{
-			input: "[[[[5,0],[7,4]],[5,5]],[6,6]]",
-			expected: "1137",
-		},
-		{
-			input: "[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]",
-			expected: "3488",
-		},
-		{
-			input: "[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]",
-			expected: "4140",
-		},
-	];
-	const part2tests: TestCase[] = [
-		{
-			input: `
-[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
-[[[5,[2,8]],4],[5,[[9,9],0]]]
-[6,[[[6,2],[5,6]],[[7,6],[4,7]]]]
-[[[6,[0,7]],[0,9]],[4,[9,[9,0]]]]
-[[[7,[6,4]],[3,[1,3]]],[[[5,5],1],9]]
-[[6,[[7,3],[3,2]]],[[[3,8],[5,7]],4]]
-[[[[5,4],[7,7]],8],[[8,3],8]]
-[[9,3],[[9,9],[6,[4,9]]]]
-[[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]]
-[[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]
-			`,
-			expected: "3993",
-		},
-	];
-
-	// Run tests
-	test.beginTests();
-	await test.section(async () => {
-		for (const testCase of part1tests) {
-			test.logTestResult(testCase, String(await p2021day18_part1(testCase.input, ...(testCase.extraArgs || []))));
-		}
-	});
-	await test.section(async () => {
-		for (const testCase of part2tests) {
-			test.logTestResult(testCase, String(await p2021day18_part2(testCase.input, ...(testCase.extraArgs || []))));
-		}
-	});
-	test.endTests();
-
-	// Get input and run program while measuring performance
-	const input = await util.getInput(DAY, YEAR);
-
-	const part1Before = performance.now();
-	const part1Solution = String(await p2021day18_part1(input));
-	const part1After = performance.now();
-
-	const part2Before = performance.now();
-	const part2Solution = String(await p2021day18_part2(input));
-	const part2After = performance.now();
-
-	logSolution(18, 2021, part1Solution, part2Solution);
-
-	log(chalk.gray("--- Performance ---"));
-	log(chalk.gray(`Part 1: ${util.formatTime(part1After - part1Before)}`));
-	log(chalk.gray(`Part 2: ${util.formatTime(part2After - part2Before)}`));
-	log();
-}
-
-run()
-	.then(() => {
-		process.exit();
-	})
-	.catch(error => {
-		throw error;
-	});
