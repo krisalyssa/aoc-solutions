@@ -41,7 +41,13 @@ defmodule AoC.Day02 do
   @spec part_2(Enumerable.t()) :: integer()
   def part_2(data) do
     data
-    |> Enum.count()
+    |> Enum.map(&String.split(&1, ~r/\s*,\s*/))
+    |> List.flatten()
+    |> Enum.map(&find_invalid_ids_long/1)
+    |> Enum.map(&Enum.to_list/1)
+    |> List.flatten()
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.reduce(0, fn e, acc -> acc + e end)
   end
 
   @spec expand_range(range :: String.t()) :: Stream.t()
@@ -66,6 +72,16 @@ defmodule AoC.Day02 do
     |> Stream.filter(&invalid?/1)
   end
 
+  @spec find_invalid_ids_long(range :: String.t()) :: Stream.t()
+  def find_invalid_ids_long(range) do
+    range
+    |> expand_range()
+    |> Stream.filter(&invalid_long?/1)
+  end
+
   @spec invalid?(id :: String.t()) :: bool()
   def invalid?(id), do: Regex.match?(~r/^(\d+)\1$/, id)
+
+  @spec invalid_long?(id :: String.t()) :: bool()
+  def invalid_long?(id), do: Regex.match?(~r/^(\d+)(\1)+$/, id)
 end
