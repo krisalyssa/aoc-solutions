@@ -1330,6 +1330,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"Set@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "Set@npm:0.4.1"
+  checksum: 10c0/fca46ccb210e84e3ec533c8e0ac8b0cdfbc4a9d6dd9551330879a291e0a5583b578766b0d522f8f1ddec57ca8cac3f8b8d20b111211fe1f6cba90a5ee2ff82c6
+  languageName: node
+  linkType: hard
+
+"a-star@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "a-star@npm:0.2.0"
+  dependencies:
+    Set: "npm:^0.4.1"
+    dict: "npm:^1.4.0"
+    heap: "npm:^0.2.3"
+  checksum: 10c0/7b2ed63484d35be68eeff7b5cdcb6a2f39f4fc153668131947e95ae71c16848d81d7f9b84272e56035894f24cf39394ceb2b3ea2cd38f193391d468be2eb74b4
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^4.0.0":
   version: 4.0.0
   resolution: "abbrev@npm:4.0.0"
@@ -1449,6 +1467,7 @@ __metadata:
     "@types/eslint-config-prettier": "npm:^6.11.3"
     "@types/lodash": "npm:^4.14.176"
     "@types/node": "npm:^24.10.1"
+    a-star: "npm:^0.2.0"
     commander: "npm:^14.0.2"
     eslint: "npm:^9.39.1"
     eslint-config-prettier: "npm:^10.1.8"
@@ -1851,6 +1870,13 @@ __metadata:
   version: 3.1.0
   resolution: "detect-newline@npm:3.1.0"
   checksum: 10c0/c38cfc8eeb9fda09febb44bcd85e467c970d4e3bf526095394e5a4f18bc26dd0cf6b22c69c1fa9969261521c593836db335c2795218f6d781a512aea2fb8209d
+  languageName: node
+  linkType: hard
+
+"dict@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "dict@npm:1.4.0"
+  checksum: 10c0/7642d7263c09b0671feaba762af8518b8f068ee1eb7cbf0b28173041d645468fbe254d4955878c3ddc44c3b607e74f616efedd352e47eb8c02bbfa3f318042aa
   languageName: node
   linkType: hard
 
@@ -2392,6 +2418,13 @@ __metadata:
   version: 4.0.0
   resolution: "has-flag@npm:4.0.0"
   checksum: 10c0/2e789c61b7888d66993e14e8331449e525ef42aac53c627cc53d1c3334e768bcb6abdc4f5f0de1478a25beec6f0bd62c7549058b7ac53e924040d4f301f02fd1
+  languageName: node
+  linkType: hard
+
+"heap@npm:^0.2.3":
+  version: 0.2.7
+  resolution: "heap@npm:0.2.7"
+  checksum: 10c0/341c5d51ae13dc8346c371a8a69c57c972fcb9a3233090d3dd5ba29d483d6b5b4e75492443cbfeacd46608bb30e6680f646ffb7a6205900221735587d07a79b6
   languageName: node
   linkType: hard
 
