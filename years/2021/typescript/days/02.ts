@@ -1,12 +1,12 @@
-export async function run(data: string) {
-  return [await runPart1(data), await runPart2(data)]
+export async function run(input: string) {
+  return [await runPart1(input), await runPart2(input)]
 }
 
-export async function runPart1(data: string) {
+export async function runPart1(input: string) {
   let h = 0
   let v = 0
 
-  asStringArray(data).forEach(s => {
+  asStringArray(input).forEach(s => {
     const instruction = s.match(/(forward|down|up)\s+(\d+)/)
     if (instruction) {
       const direction = instruction[1]
@@ -31,12 +31,12 @@ export async function runPart1(data: string) {
   return h * v
 }
 
-export async function runPart2(data: string) {
+export async function runPart2(input: string) {
   let h = 0
   let v = 0
   let aim = 0
 
-  asStringArray(data).forEach(s => {
+  asStringArray(input).forEach(s => {
     const instruction = s.match(/(forward|down|up)\s+(\d+)/)
     if (instruction) {
       const direction = instruction[1]

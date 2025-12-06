@@ -1,14 +1,14 @@
-export async function run(data: string) {
-  return [await runPart1(data), await runPart2(data)]
+export async function run(input: string) {
+  return [await runPart1(input), await runPart2(input)]
 }
 
-export async function runPart1(data: string) {
-  const values = asNumberArray(data)
+export async function runPart1(input: string) {
+  const values = asNumberArray(input)
   return asWindows(values, 2).map(pair => (pair[0] < pair[1] ? 1 : 0) as number).reduce((acc, v) => acc + v, 0)
 }
 
-export async function runPart2(data: string) {
-  const values = asWindows(asNumberArray(data), 3).map(window => window.reduce((acc, v) => acc + v, 0))
+export async function runPart2(input: string) {
+  const values = asWindows(asNumberArray(input), 3).map(window => window.reduce((acc, v) => acc + v, 0))
   return asWindows(values, 2).map(pair => (pair[0] < pair[1] ? 1 : 0) as number).reduce((acc, v) => acc + v, 0)
 }
 

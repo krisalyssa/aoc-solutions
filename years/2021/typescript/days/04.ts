@@ -15,12 +15,12 @@ const winners = [
 	[4, 9, 14, 19, 24],
 ];
 
-export async function run(data: string) {
-  return [await runPart1(data), await runPart2(data)]
+export async function run(input: string) {
+  return [await runPart1(input), await runPart2(input)]
 }
 
-export async function runPart1(data: string) {
-	const matchData = data.trim().match(/^(\S+)\s+(.+)$/ms);
+export async function runPart1(input: string) {
+	const matchData = input.trim().match(/^(\S+)\s+(.+)$/ms);
 	if (!matchData) {
 		return "no match in input";
 	}
@@ -51,8 +51,8 @@ export async function runPart1(data: string) {
 	return solution;
 }
 
-export async function runPart2(data: string) {
-	const matchData = data.trim().match(/^(\S+)\s+(.+)$/ms);
+export async function runPart2(input: string) {
+	const matchData = input.trim().match(/^(\S+)\s+(.+)$/ms);
 	if (!matchData) {
 		return "no match in input";
 	}

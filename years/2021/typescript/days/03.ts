@@ -1,10 +1,10 @@
-export async function run(data: string) {
-  return [await runPart1(data), await runPart2(data)]
+export async function run(input: string) {
+  return [await runPart1(input), await runPart2(input)]
 }
 
-export async function runPart1(data: string) {
-  const input = asStringArray(data)
-  const width = input[0].length
+export async function runPart1(input: string) {
+  const data = asStringArray(input)
+  const width = data[0].length
 
   let gamma = ""
   let epsilon = ""
@@ -13,7 +13,7 @@ export async function runPart1(data: string) {
     let count0 = 0
     let count1 = 0
 
-    input.forEach(s => {
+    data.forEach(s => {
       switch (s[i]) {
         case "0":
           count0 += 1
@@ -37,11 +37,11 @@ export async function runPart1(data: string) {
   return parseInt(gamma, 2) * parseInt(epsilon, 2)
 }
 
-export async function runPart2(data: string) {
-  const input = asStringArray(data)
-  const width = input[0].length
+export async function runPart2(input: string) {
+  const data = asStringArray(input)
+  const width = data[0].length
 
-  return oxygenGeneratorRating(Array.from(input), width) * co2ScrubberRating(Array.from(input), width)
+  return oxygenGeneratorRating(Array.from(data), width) * co2ScrubberRating(Array.from(data), width)
 }
 
 function asStringArray(data: string) {
