@@ -1,14 +1,4 @@
-import chalk from "chalk";
-import { performance } from "perf_hooks";
-import { log, logSolution } from "../util/log";
-import * as test from "../util/test";
-import * as util from "../util/util";
-const YEAR = 2021;
-const DAY = 12;
-
-// solution path: /Users/ccottingham/Projects/advent-of-code/2021/years/2021/12/index.ts
-// data path    : /Users/ccottingham/Projects/advent-of-code/2021/years/2021/12/data.txt
-// problem url  : https://adventofcode.com/2021/day/12
+import * as util from "../util";
 
 class Node {
 	label: string;
@@ -47,17 +37,11 @@ class Graph {
 	}
 }
 
-class Solution {
-	graph: Graph;
-	path: Array<string>;
-
-	constructor(graph: Graph) {
-		this.graph = graph;
-		this.path = new Array();
-	}
+export async function run(input: string) {
+  return [await runPart1(input), await runPart2(input)]
 }
 
-async function p2021day12_part1(input: string, ...params: any[]) {
+export async function runPart1(input: string) {
 	const data = util.lineify(input.trim());
 	const graph = new Graph();
 
@@ -77,7 +61,7 @@ async function p2021day12_part1(input: string, ...params: any[]) {
 	return paths.length;
 }
 
-async function p2021day12_part2(input: string, ...params: any[]) {
+export async function runPart2(input: string) {
 	const data = util.lineify(input.trim());
 	const graph = new Graph();
 
@@ -156,116 +140,3 @@ function oneSmallTwiceAndBig(path: Array<string>, nextLabel: string): boolean {
 function smallOnceAndBig(path: Array<string>, nextLabel: string): boolean {
 	return !path.includes(nextLabel) || nextLabel === nextLabel.toUpperCase();
 }
-
-async function run() {
-	const data1 = `
-start-A
-start-b
-A-c
-A-b
-b-d
-A-end
-b-end
-	`;
-	const data2 = `
-dc-end
-HN-start
-start-kj
-dc-start
-dc-HN
-LN-dc
-HN-end
-kj-sa
-kj-HN
-kj-dc
-	`;
-	const data3 = `
-fs-end
-he-DX
-fs-he
-start-DX
-pj-DX
-end-zg
-zg-sl
-zg-pj
-pj-he
-RW-he
-fs-DX
-pj-RW
-zg-RW
-start-pj
-he-WI
-zg-he
-pj-fs
-start-RW
-	`;
-
-	const part1tests: TestCase[] = [
-		{
-			input: data1,
-			expected: "10",
-		},
-		{
-			input: data2,
-			expected: "19",
-		},
-		{
-			input: data3,
-			expected: "226",
-		},
-	];
-	const part2tests: TestCase[] = [
-		{
-			input: data1,
-			expected: "36",
-		},
-		{
-			input: data2,
-			expected: "103",
-		},
-		{
-			input: data3,
-			expected: "3509",
-		},
-	];
-
-	// Run tests
-	test.beginTests();
-	await test.section(async () => {
-		for (const testCase of part1tests) {
-			test.logTestResult(testCase, String(await p2021day12_part1(testCase.input, ...(testCase.extraArgs || []))));
-		}
-	});
-	await test.section(async () => {
-		for (const testCase of part2tests) {
-			test.logTestResult(testCase, String(await p2021day12_part2(testCase.input, ...(testCase.extraArgs || []))));
-		}
-	});
-	test.endTests();
-
-	// Get input and run program while measuring performance
-	const input = await util.getInput(DAY, YEAR);
-
-	const part1Before = performance.now();
-	const part1Solution = String(await p2021day12_part1(input));
-	const part1After = performance.now();
-
-	const part2Before = performance.now();
-	const part2Solution = String(await p2021day12_part2(input));
-	const part2After = performance.now();
-
-	logSolution(12, 2021, part1Solution, part2Solution);
-
-	log(chalk.gray("--- Performance ---"));
-	log(chalk.gray(`Part 1: ${util.formatTime(part1After - part1Before)}`));
-	log(chalk.gray(`Part 2: ${util.formatTime(part2After - part2Before)}`));
-	log();
-}
-
-run()
-	.then(() => {
-		process.exit();
-	})
-	.catch(error => {
-		throw error;
-	});
